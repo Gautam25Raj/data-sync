@@ -4,16 +4,16 @@ const userSlice = createSlice({
   name: "user",
 
   initialState: {
-    ablyToken: null,
+    user: null,
   },
 
   reducers: {
-    updateAblyToken: (state, action) => {
-      state.ablyToken = action.payload;
+    setUser: (state, action) => {
+      state.user = action.payload;
     },
   },
 });
 
-export const { updateAblyToken } = userSlice.actions;
+export const { setUser } = userSlice.actions;
 
 export default userSlice.reducer;

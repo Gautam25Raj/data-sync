@@ -1,29 +1,36 @@
 "use client";
 
 import Ably from "ably";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 
 import useAbly from "@/hooks/useAbly";
 import LiveCursor from "@/components/LiveCursor";
+import SidebarWithBurgerMenu from "@/components/layout/onBoard/SignUp";
 
 export default function Home() {
-  const { initializeAbly, disconnectAbly } = useAbly();
+  const { initializeAbly } = useAbly();
 
-  useEffect(() => {
-    const auth = async () => {
-      await initializeAbly(Math.random());
-    };
-    auth();
+  // const memoizedInitAbly = useCallback(
+  //   () => initializeAbly("test"),
+  //   [initializeAbly]
+  // );
 
-    return () => {
-      disconnectAbly();
-    };
-  }, []);
+  // useEffect(() => {
+  //   let cleanupAbly;
+
+  //   memoizedInitAbly().then((cleanup) => (cleanupAbly = cleanup));
+
+  //   return () => {
+  //     if (cleanupAbly) {
+  //       cleanupAbly();
+  //     }
+  //   };
+  // }, []);
 
   return (
-    <main>
-      Hello
-      <LiveCursor />
+    <main className="bg-gray-50 flex justify-center items-center h-screen w-screen">
+      {/* <LiveCursor /> */}
+      <SidebarWithBurgerMenu />
     </main>
   );
 }
