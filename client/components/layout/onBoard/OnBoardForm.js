@@ -9,7 +9,7 @@ import LoginForm from "./LoginForm";
 import SignUpForm from "./SignUpForm";
 import FormFooter from "./FormFooter";
 
-const CheckoutForm = () => {
+const OnBoardForm = () => {
   const [isSigningUp, setIsSigningUp] = useState(true);
 
   return (
@@ -27,4 +27,4 @@ const CheckoutForm = () => {
   );
 };
 
-export default CheckoutForm;
+export default OnBoardForm;

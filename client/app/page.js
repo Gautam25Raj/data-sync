@@ -5,7 +5,7 @@ import { useCallback, useEffect } from "react";
 
 import useAbly from "@/hooks/useAbly";
 import LiveCursor from "@/components/LiveCursor";
-import SidebarWithBurgerMenu from "@/components/layout/onBoard/SignUp";
+import OnBoardForm from "@/components/layout/onBoard/OnBoardForm";
 
 export default function Home() {
   const { initializeAbly } = useAbly();
@@ -30,7 +30,7 @@ export default function Home() {
   return (
     <main className="bg-gray-50 flex justify-center items-center h-screen w-screen">
       {/* <LiveCursor /> */}
-      <SidebarWithBurgerMenu />
+      <OnBoardForm />
     </main>
   );
 }

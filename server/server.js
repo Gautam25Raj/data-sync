@@ -14,7 +14,8 @@ app.use(express.json());
 
 connectDB();
 
-app.use("/api/ably", require("./routes/ably"));
+app.use("/api/ably", require("./routes/ablyRoutes"));
+app.use("/api/users", require("./routes/userRoutes"));
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

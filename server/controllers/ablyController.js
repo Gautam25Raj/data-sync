@@ -1,4 +1,3 @@
-// const jwt = require('jsonwebtoken');
 const Ably = require("ably");
 
 require("dotenv").config();
