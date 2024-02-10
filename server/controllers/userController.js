@@ -16,12 +16,43 @@ exports.getUser = async (req, res) => {
 
 exports.postUser = async (req, res) => {
   const { email, username, password } = req.body;
+  console.log(req.body);
+
+  if (!email || !username || !password) {
+    return res
+      .status(400)
+      .json({ message: "Email, username and password required" });
+  }
+
+  if (username.length < 3) {
+    return res
+      .status(400)
+      .json({ message: "Username should be at least 3 characters long" });
+  }
+
+  if (!email.includes("@")) {
+    return res.status(400).json({ message: "Invalid email format" });
+  }
+
+  if (password.length < 6) {
+    return res
+      .status(400)
+      .json({ message: "Password should be at least 6 characters long" });
+  }
 
   try {
-    const existingUser = await User.findOne({ email });
+    const existingUserByEmail = await User.findOne({ email });
+    const existingUserByUsername = await User.findOne({ username });
 
-    if (existingUser)
-      return res.status(400).json({ message: "User already exists" });
+    if (existingUserByEmail)
+      return res
+        .status(400)
+        .json({ message: "User with this email already exists" });
+
+    if (existingUserByUsername)
+      return res
+        .status(400)
+        .json({ message: "User with this username already exists" });
 
     const user = new User({ email, username, password });
     const savedUser = await user.save();

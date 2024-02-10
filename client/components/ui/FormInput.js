@@ -2,7 +2,16 @@
 
 import { Input, Typography } from "@material-tailwind/react";
 
-const FormInput = ({ id, label, type, placeholder, input, setInput, icon }) => {
+const FormInput = ({
+  id,
+  label,
+  type,
+  placeholder,
+  input,
+  setInput,
+  icon,
+  required,
+}) => {
   return (
     <div>
       <Typography
@@ -13,6 +22,7 @@ const FormInput = ({ id, label, type, placeholder, input, setInput, icon }) => {
         className="mb-2 font-medium cursor-default prevent-select"
       >
         {label}
+        {required && <span className="text-red-500">*</span>}
       </Typography>
 
       <Input
