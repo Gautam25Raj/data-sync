@@ -7,7 +7,7 @@ const getChannel = async (req, res) => {
   if (!id) return res.status(400).json({ message: "Channel ID is required" });
 
   try {
-    const channel = await Channel.findById(id);
+    const channel = await Channel.findById(id).populate("users", "-password");
 
     if (!channel) {
       return res.status(404).json({
@@ -21,9 +21,7 @@ const getChannel = async (req, res) => {
       });
     }
 
-    res.status(200).json({
-      channel,
-    });
+    res.status(200).json(channel);
   } catch (error) {
     res.status(500).json({
       message: "Error fetching channel",
@@ -163,7 +161,7 @@ const deleteChannel = async (req, res) => {
       });
     }
 
-    await Channel.findByIdAndRemove(id);
+    await Channel.deleteOne({ _id: id });
 
     res.status(200).json({
       message: "Channel deleted successfully",

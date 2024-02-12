@@ -12,17 +12,19 @@ const fetchChats = async (req, res) => {
     const chats = await Chat.find({
       users: { $elemMatch: { $eq: currentUser.id } },
     })
-      .populate("latestMessage")
+      .populate("latestMessage", "content -_id")
       .select("_id users latestMessage type");
 
     res.status(200).json(chats);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res
+      .status(400)
+      .json({ message: "Error fetching chats.", error: error.message });
   }
 };
 
 const createChats = async (req, res) => {
-  const { userId, message, contactType } = req.body;
+  const { userId, message } = req.body;
   const currentUser = req.userData;
 
   if (!userId) {
@@ -43,19 +45,16 @@ const createChats = async (req, res) => {
         { users: { $elemMatch: { $eq: currentUser.id } } },
         { users: { $elemMatch: { $eq: userId } } },
       ],
-    });
+    }).populate("latestMessage", "content");
 
     if (existingChat) {
-      const { _id, users, latestMessage, type } = existingChat;
-
-      res.status(200).json({ _id, users, latestMessage, type });
+      res.status(200).json(existingChat);
     } else {
       const chatData = {
         users: [currentUser.id, userId],
-        type: contactType,
       };
 
-      const createdChat = await Chat.create(chatData);
+      let createdChat = await Chat.create(chatData);
 
       let latestMessage = null;
 
@@ -66,20 +65,24 @@ const createChats = async (req, res) => {
           content: message,
           chat: createdChat._id,
         });
-        latestMessage = createdMessage._id;
+        latestMessage = createdMessage;
 
-        await Chat.updateOne({ _id: createdChat._id }, { latestMessage });
+        await Chat.updateOne(
+          { _id: createdChat._id },
+          { latestMessage: latestMessage._id }
+        );
       }
 
       res.status(200).json({
         _id: createdChat._id,
         users: createdChat.users,
-        latestMessage,
-        type: createdChat.type,
+        latestMessage: { content: latestMessage.content },
       });
     }
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res
+      .status(400)
+      .json({ message: "Error creating chat.", error: error.message });
   }
 };
 
@@ -94,12 +97,14 @@ const deleteChat = async (req, res) => {
     const chat = await Chat.findByIdAndDelete(chatId);
 
     if (!chat) {
-      return res.status(404).json({ message: "Chat not found" });
+      return res.status(404).json({ message: "Chat not found." });
     }
 
-    res.status(200).json({ message: "Chat deleted successfully" });
+    res.status(200).json({ message: "Chat deleted successfully." });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res
+      .status(400)
+      .json({ message: "Error deleting chat.", error: error.message });
   }
 };
 

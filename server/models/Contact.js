@@ -14,12 +14,6 @@ const ChatSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Message",
     },
-
-    type: {
-      type: String,
-      enum: ["personal", "group"],
-      default: "personal",
-    },
   },
 
   {

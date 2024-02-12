@@ -7,10 +7,12 @@ const {
   fetchChatMessages,
   fetchChannelMessages,
   fetchLatestMessage,
-  sendMessage,
+  sendChatMessage,
+  sendChannelMessage,
   updateMessage,
   deleteMessage,
-  deleteMessages,
+  deleteChatMessages,
+  deleteChannelMessages,
 } = require("../controllers/messageController");
 
 router.route("/:messageId").get(authenticate, fetchMessage);
@@ -18,11 +20,13 @@ router.route("/chats/:chatId").get(authenticate, fetchChatMessages);
 router.route("/channels/:channelId").get(authenticate, fetchChannelMessages);
 router.route("/:chatId/latest-message").get(authenticate, fetchLatestMessage);
 
-router.route("/").post(authenticate, sendMessage);
+router.route("/chat").post(authenticate, sendChatMessage);
+router.route("/channel").post(authenticate, sendChannelMessage);
 
 router.route("/:messageId").put(authenticate, updateMessage);
 
 router.route("/:messageId").delete(authenticate, deleteMessage);
-router.route("/:chatId").delete(authenticate, deleteMessages);
+router.route("/chat/:chatId").delete(authenticate, deleteChatMessages);
+router.route("/channel/:channelId").delete(authenticate, deleteChannelMessages);
 
 module.exports = router;

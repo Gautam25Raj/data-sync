@@ -4,40 +4,41 @@ const jwt = require("jsonwebtoken");
 
 exports.getUser = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).select("-password");
+    const user = await User.findById(req.params.id).select("-password -__v");
 
-    if (!user) return res.status(404).json({ message: "User not found" });
+    if (!user) return res.status(404).json({ message: "User not found." });
 
-    res.status(200).json(user);
+    res.status(200).json({ data: user });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res
+      .status(500)
+      .json({ message: "Error fetching user.", error: err.message });
   }
 };
 
 exports.postUser = async (req, res) => {
   const { email, username, password } = req.body;
-  console.log(req.body);
 
   if (!email || !username || !password) {
     return res
       .status(400)
-      .json({ message: "Email, username and password required" });
+      .json({ message: "Email, username and password required." });
   }
 
   if (username.length < 3) {
     return res
       .status(400)
-      .json({ message: "Username should be at least 3 characters long" });
+      .json({ message: "Username should be at least 3 characters long." });
   }
 
   if (!email.includes("@")) {
-    return res.status(400).json({ message: "Invalid email format" });
+    return res.status(400).json({ message: "Invalid email format." });
   }
 
   if (password.length < 6) {
     return res
       .status(400)
-      .json({ message: "Password should be at least 6 characters long" });
+      .json({ message: "Password should be at least 6 characters long." });
   }
 
   try {
@@ -47,12 +48,12 @@ exports.postUser = async (req, res) => {
     if (existingUserByEmail)
       return res
         .status(400)
-        .json({ message: "User with this email already exists" });
+        .json({ message: "User with this email already exists." });
 
     if (existingUserByUsername)
       return res
         .status(400)
-        .json({ message: "User with this username already exists" });
+        .json({ message: "User with this username already exists." });
 
     const user = new User({ email, username, password });
     const savedUser = await user.save();
@@ -70,14 +71,14 @@ exports.postUser = async (req, res) => {
       secure: true,
       maxAge: 3600000,
     });
-    Z;
 
-    const userObject = savedUser.toObject();
-    delete userObject.password;
+    savedUser.password = undefined;
 
-    res.status(201).json(userObject);
+    res.status(201).json({ token, data: savedUser });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res
+      .status(500)
+      .json({ message: "Error signing up. Check later.", error: err.message });
   }
 };
 
@@ -85,11 +86,11 @@ exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: "User does not exist" });
+    const user = await User.findOne({ email }, { __v: 0 });
+    if (!user) return res.status(400).json({ message: "User does not exist." });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: "Invalid password" });
+    if (!isMatch) return res.status(400).json({ message: "Invalid password." });
 
     const token = jwt.sign(
       { id: user._id, email: user.email, username: user.username },
@@ -105,9 +106,13 @@ exports.loginUser = async (req, res) => {
       maxAge: 3600000,
     });
 
-    res.status(200).json({ token, user });
+    user.password = undefined;
+
+    res.status(200).json({ token, data: user });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res
+      .status(500)
+      .json({ message: "Error loging in user.", error: err.message });
   }
 };
 
@@ -116,12 +121,12 @@ exports.updateUser = async (req, res) => {
 
   try {
     if (req.userData.id !== req.params.id) {
-      return res.status(403).json({ message: "Not authorized" });
+      return res.status(403).json({ message: "Not authorized." });
     }
 
     let user = await User.findById(req.params.id);
 
-    if (!user) return res.status(404).json({ message: "User not found" });
+    if (!user) return res.status(404).json({ message: "User not found." });
 
     if (email) user.email = email;
     if (username) user.username = username;
@@ -132,27 +137,30 @@ exports.updateUser = async (req, res) => {
 
     const updatedUser = await user.save();
 
-    const userObject = updatedUser.toObject();
-    delete userObject.password;
+    updatedUser.password = undefined;
 
-    res.status(200).json(userObject);
+    res.status(200).json({ data: updatedUser });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res
+      .status(500)
+      .json({ message: "Error updating user.", error: err.message });
   }
 };
 
 exports.deleteUser = async (req, res) => {
   try {
     if (req.userData.id !== req.params.id) {
-      return res.status(403).json({ message: "Not authorized" });
+      return res.status(403).json({ message: "Not authorized." });
     }
 
     const result = await User.findByIdAndDelete(req.params.id);
 
-    if (!result) return res.status(404).json({ message: "User not found" });
+    if (!result) return res.status(404).json({ message: "User not found." });
 
-    res.status(200).json({ message: "User deleted" });
+    res.status(200).json({ message: "User deleted successfully." });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res
+      .status(500)
+      .json({ message: "Error deleteing user.", error: err.message });
   }
 };
