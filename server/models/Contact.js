@@ -1,12 +1,25 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-const ChatSchema = new mongoose.Schema(
+const ChatSchema = new Schema(
   {
     users: [
       {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: "User",
       },
     ],
+
+    latestMessage: {
+      type: Schema.Types.ObjectId,
+      ref: "Message",
+    },
+
+    type: {
+      type: String,
+      enum: ["personal", "group"],
+      default: "personal",
+    },
   },
 
   {

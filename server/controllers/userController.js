@@ -57,6 +57,21 @@ exports.postUser = async (req, res) => {
     const user = new User({ email, username, password });
     const savedUser = await user.save();
 
+    const token = jwt.sign(
+      { id: user._id, email: user.email, username: user.username },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1d",
+      }
+    );
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      maxAge: 3600000,
+    });
+    Z;
+
     const userObject = savedUser.toObject();
     delete userObject.password;
 
@@ -77,7 +92,7 @@ exports.loginUser = async (req, res) => {
     if (!isMatch) return res.status(400).json({ message: "Invalid password" });
 
     const token = jwt.sign(
-      { id: user._id, email: user.email },
+      { id: user._id, email: user.email, username: user.username },
       process.env.JWT_SECRET,
       {
         expiresIn: "1d",
@@ -90,7 +105,7 @@ exports.loginUser = async (req, res) => {
       maxAge: 3600000,
     });
 
-    res.status(200).json({ token });
+    res.status(200).json({ token, user });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

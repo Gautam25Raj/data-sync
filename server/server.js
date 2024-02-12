@@ -16,6 +16,9 @@ connectDB();
 
 app.use("/api/ably", require("./routes/ablyRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
+app.use("/api/contact", require("./routes/contactRoutes"));
+app.use("/api/message", require("./routes/messageRoutes"));
+app.use("/api/channel", require("./routes/channelRoutes"));
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

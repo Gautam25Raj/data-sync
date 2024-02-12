@@ -9,7 +9,7 @@ const MessageSchema = new mongoose.Schema(
     },
 
     sender: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
@@ -23,7 +23,11 @@ const MessageSchema = new mongoose.Schema(
     chat: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Chat",
-      required: true,
+    },
+
+    channel: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Channel",
     },
   },
 
