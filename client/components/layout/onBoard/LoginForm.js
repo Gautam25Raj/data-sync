@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 import { setUser } from "@/redux/slice/userSlice";
 
@@ -16,8 +17,10 @@ const LoginForm = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("gautam@gg.com");
+  const [password, setPassword] = useState("12345678");
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -38,6 +41,8 @@ const LoginForm = () => {
     }
 
     try {
+      setIsLoading(true);
+
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/login`,
         {
@@ -57,15 +62,17 @@ const LoginForm = () => {
 
       const data = await response.json();
       dispatch(setUser(data));
+      localStorage.setItem("token", data.token);
 
       toast.success("Welcome Back! You are now signed up!");
 
       setEmail("");
       setPassword("");
-
+      setIsLoading(false);
       router.push("/dashboard");
     } catch (error) {
-      console.log(error);
+      setIsLoading(false);
+      toast.error("Something went wrong");
     }
   };
 
@@ -101,8 +108,17 @@ const LoginForm = () => {
         }
       />
 
-      <Button onClick={handleLogin} size="lg" className="mt-2">
-        Login
+      <Button
+        disabled={isLoading}
+        onClick={handleLogin}
+        size="lg"
+        className="mt-2"
+      >
+        {isLoading ? (
+          <AiOutlineLoading3Quarters className="mx-auto animate-spin" />
+        ) : (
+          "Login"
+        )}
       </Button>
     </>
   );

@@ -8,8 +8,10 @@ router.get("/:id", userController.getUser);
 
 router.post("/", userController.postUser);
 router.post("/login", userController.loginUser);
+router.post("/logout", authenticate, userController.logoutUser);
 
 router.put("/:id", authenticate, userController.updateUser);
+
 router.delete("/:id", authenticate, userController.deleteUser);
 
 module.exports = router;

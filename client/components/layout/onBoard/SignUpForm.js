@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 import FormInput from "@/components/ui/FormInput";
 import { setUser } from "@/redux/slice/userSlice";
@@ -18,6 +19,8 @@ const SignUpForm = () => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -62,6 +65,8 @@ const SignUpForm = () => {
 
       const data = await response.json();
       dispatch(setUser(data));
+
+      localStorage.setItem("token", data.token);
 
       toast.success("User created successfully");
 
@@ -115,8 +120,17 @@ const SignUpForm = () => {
         }
       />
 
-      <Button onClick={handleSignUp} size="lg" className="mt-2">
-        Sign Up
+      <Button
+        disabled={isLoading}
+        onClick={handleSignUp}
+        size="lg"
+        className="mt-2"
+      >
+        {isLoading ? (
+          <AiOutlineLoading3Quarters className="mx-auto animate-spin" />
+        ) : (
+          "Sign Up"
+        )}
       </Button>
     </>
   );
