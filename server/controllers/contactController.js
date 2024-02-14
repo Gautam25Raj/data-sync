@@ -5,7 +5,7 @@ const fetchChats = async (req, res) => {
   const currentUser = req.userData;
 
   if (!currentUser) {
-    return res.status(400).json({ message: "User not authenticated." });
+    throw new Error("User not authenticated");
   }
 
   try {
@@ -27,19 +27,19 @@ const createChats = async (req, res) => {
   const { userId, message } = req.body;
   const currentUser = req.userData;
 
-  if (!userId) {
-    return res.status(400).json({ message: "No user exist with this Id." });
-  }
-
-  if (!message) {
-    return res.status(400).json({ message: "Message is required." });
-  }
-
-  if (!currentUser) {
-    return res.status(400).json({ message: "User not authenticated." });
-  }
-
   try {
+    if (!userId) {
+      throw new Error("User Id is required.");
+    }
+
+    if (!message) {
+      throw new Error("Message is required.");
+    }
+
+    if (!currentUser) {
+      throw new Error("User not authenticated.");
+    }
+
     const existingChat = await Chat.findOne({
       $and: [
         { users: { $elemMatch: { $eq: currentUser.id } } },
@@ -89,15 +89,15 @@ const createChats = async (req, res) => {
 const deleteChat = async (req, res) => {
   const { chatId } = req.params;
 
-  if (!chatId) {
-    return res.status(400).json({ message: "No chat ID provided." });
-  }
-
   try {
+    if (!chatId) {
+      throw new Error("Chat ID is required.");
+    }
+
     const chat = await Chat.findByIdAndDelete(chatId);
 
     if (!chat) {
-      return res.status(404).json({ message: "Chat not found." });
+      throw new Error("Chat not found.");
     }
 
     res.status(200).json({ message: "Chat deleted successfully." });

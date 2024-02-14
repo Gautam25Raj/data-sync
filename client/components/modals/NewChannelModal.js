@@ -42,7 +42,7 @@ const NewChannelModal = () => {
 
     try {
       if (!channelName) {
-        throw new Error("Channel name is required");
+        throw new Error("Channel name is required.");
       }
 
       if (channelUsers.length < 1 || !channelUsers) {
@@ -51,10 +51,14 @@ const NewChannelModal = () => {
 
       const usersArray = channelUsers.split(",").map((user) => user.trim());
 
-      await createChannel(channelName, usersArray);
+      const response = await createChannel(channelName, usersArray);
+
+      if (response) {
+        toast.success("Channel created successfully.");
+        handleOpen();
+      }
 
       setIsLoaded(false);
-      handleOpen();
     } catch (err) {
       toast.error(err.message);
       setIsLoaded(false);
@@ -67,7 +71,7 @@ const NewChannelModal = () => {
         <DialogHeader className="flex flex-col items-start">
           {" "}
           <Typography className="mb-1" variant="h4">
-            New message to @{" "}
+            Create New Channel
           </Typography>
         </DialogHeader>
 
@@ -81,11 +85,11 @@ const NewChannelModal = () => {
 
       <DialogBody className="!p-6">
         <Typography
-          className="mb-10 -mt-12 text-lg"
+          className="mb-10 -mt-12 text-lg w-10/12 text-md"
           color="gray"
           variant="lead"
         >
-          Write the message and then click button.
+          Write your channel name and add members to create a new channel.
         </Typography>
 
         <div className="grid gap-6">
