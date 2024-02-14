@@ -6,14 +6,14 @@ exports.fetchMessage = async (req, res) => {
   const { messageId } = req.params;
 
   if (!messageId) {
-    return res.status(400).json({ message: "Message Id not provided." });
+    throw new Error("Message Id not provided.");
   }
 
   try {
     const message = await Message.findById(messageId);
 
     if (!message) {
-      return res.status(404).json({ message: "Message not found." });
+      throw new Error("Message not found.");
     }
 
     res.status(200).json(message);
@@ -28,23 +28,21 @@ exports.fetchMessage = async (req, res) => {
 exports.fetchChatMessages = async (req, res) => {
   const { chatId } = req.params;
 
-  if (!chatId) {
-    return res.status(400).json({ message: "Contact Id not provided." });
-  }
-
   try {
+    if (!chatId) {
+      throw new Error("Chat Id not provided.");
+    }
+
     const chatExists = await Chat.findById(chatId);
 
     if (!chatExists) {
-      return res.status(404).json({ message: "Contact not found." });
+      throw new Error("Chat not found.");
     }
 
     const messages = await Message.find({ chat: chatId }).sort("createdAt");
 
-    if (!messages) {
-      return res
-        .status(404)
-        .json({ message: "No messages found for this contact." });
+    if (!messages || messages.length === 0) {
+      throw new Error("No messages found for this chat.");
     }
 
     res.status(200).json(messages);
@@ -59,15 +57,15 @@ exports.fetchChatMessages = async (req, res) => {
 exports.fetchChannelMessages = async (req, res) => {
   const { channelId } = req.params;
 
-  if (!channelId) {
-    return res.status(400).json({ message: "Channel Id not provided." });
-  }
-
   try {
+    if (!channelId) {
+      throw new Error("Channel Id not provided.");
+    }
+
     const channelExists = await Channel.findById(channelId);
 
     if (!channelExists) {
-      return res.status(404).json({ message: "Channel not found." });
+      throw new Error("Channel not found.");
     }
 
     const messages = await Message.find({ chat: channelId })
@@ -75,9 +73,7 @@ exports.fetchChannelMessages = async (req, res) => {
       .populate("sender", "username");
 
     if (!messages) {
-      return res
-        .status(404)
-        .json({ message: "No messages found for this channel." });
+      throw new Error("No messages found for this channel.");
     }
 
     res.status(200).json(messages);
@@ -93,22 +89,20 @@ exports.fetchLatestMessage = async (req, res) => {
   const { chatId } = req.params;
 
   if (!chatId) {
-    return res.status(400).json({ message: "Contact Id not provided." });
+    throw new Error("Contact Id not provided.");
   }
 
   const chatExists = await Chat.findById(chatId);
 
   if (!chatExists) {
-    return res.status(404).json({ message: "Contact not found." });
+    throw new Error("Contact not found.");
   }
 
   try {
     const message = await Message.findOne({ chat: chatId }).sort("-createdAt");
 
     if (!message) {
-      return res
-        .status(404)
-        .json({ message: "No messages found for this chat" });
+      throw new Error("No messages found for this chat.");
     }
 
     res.status(200).json(message);
@@ -125,7 +119,7 @@ exports.sendChatMessage = async (req, res) => {
   const { id: sender } = req.userData;
 
   if (!chatId || !content) {
-    return res.status(400).json({ message: "Contact or message not sent." });
+    throw new Error("Contact or message not sent.");
   }
 
   const newMessage = {
@@ -138,7 +132,7 @@ exports.sendChatMessage = async (req, res) => {
     const chatExists = await Chat.findById(chatId);
 
     if (!chatExists) {
-      return res.status(404).json({ message: "Contact not found." });
+      throw new Error("Contact not found.");
     }
 
     const message = await Message.create(newMessage);
@@ -157,7 +151,7 @@ exports.sendChannelMessage = async (req, res) => {
   const { id: sender } = req.userData;
 
   if (!channelId || !content) {
-    return res.status(400).json({ message: "Channel or message not sent." });
+    throw new Error("Channel or message not sent.");
   }
 
   const newMessage = {
@@ -170,7 +164,7 @@ exports.sendChannelMessage = async (req, res) => {
     const channelExists = await Channel.findById(channelId);
 
     if (!channelExists) {
-      return res.status(404).json({ message: "Channel not found." });
+      throw new Error("Channel not found.");
     }
 
     const message = await Message.create(newMessage);
@@ -189,16 +183,14 @@ exports.updateMessage = async (req, res) => {
   const { content } = req.body;
 
   if (!messageId || !content) {
-    return res
-      .status(400)
-      .json({ message: "Message Id or content not provided." });
+    throw new Error("Message Id or content not provided.");
   }
 
   try {
     const message = await Message.findById(messageId);
 
     if (!message) {
-      return res.status(404).json({ message: "Message not found." });
+      throw new Error("Message not found.");
     }
 
     message.content = content;
@@ -217,21 +209,24 @@ exports.deleteMessage = async (req, res) => {
   const { messageId } = req.params;
 
   if (!messageId) {
-    return res.status(400).json({ message: "Message Id not provided." });
+    throw new Error("Message Id not provided.");
   }
 
   try {
     const message = await Message.findById(messageId);
 
     if (!message) {
-      return res.status(404).json({ message: "Message not found." });
+      throw new Error("Message not found.");
     }
 
     await Message.findByIdAndDelete(messageId);
 
     res.status(200).json({ message: "Message deleted successfully." });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({
+      message: "Error deleting message.",
+      error: err.message,
+    });
   }
 };
 
@@ -239,13 +234,13 @@ exports.deleteChatMessages = async (req, res) => {
   const { chatId } = req.params;
 
   if (!chatId) {
-    return res.status(400).json({ message: "Contact Id not provided." });
+    throw new Error("Contact Id not provided.");
   }
 
   const chatExists = await Chat.findById(chatId);
 
   if (!chatExists) {
-    return res.status(404).json({ message: "Chat not found." });
+    throw new Error("Chat not found.");
   }
 
   try {
@@ -253,7 +248,10 @@ exports.deleteChatMessages = async (req, res) => {
 
     res.status(200).json({ message: "Chat messages deleted successfully." });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({
+      message: "Error deleting chat messages.",
+      error: err.message,
+    });
   }
 };
 
@@ -261,13 +259,13 @@ exports.deleteChannelMessages = async (req, res) => {
   const { channelId } = req.params;
 
   if (!channelId) {
-    return res.status(400).json({ message: "Contact Id not provided." });
+    throw new Error("Channel Id not provided.");
   }
 
   const channelExists = await Channel.findById(channelId);
 
   if (!channelExists) {
-    return res.status(404).json({ message: "Channel not found." });
+    throw new Error("Channel not found.");
   }
 
   try {
@@ -275,6 +273,9 @@ exports.deleteChannelMessages = async (req, res) => {
 
     res.status(200).json({ message: "Channel messages deleted successfully." });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({
+      message: "Error deleting channel messages.",
+      error: err.message,
+    });
   }
 };

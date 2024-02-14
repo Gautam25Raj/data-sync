@@ -4,18 +4,15 @@ import { Button } from "@material-tailwind/react";
 
 import { toast } from "sonner";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
-import { setUser } from "@/redux/slice/userSlice";
+import useUser from "@/hooks/useUser";
 
 import FormInput from "@/components/ui/FormInput";
 
 const LoginForm = () => {
-  const router = useRouter();
-  const dispatch = useDispatch();
+  const { loginUser } = useUser();
 
   const [email, setEmail] = useState("gautam@gg.com");
   const [password, setPassword] = useState("12345678");
@@ -25,55 +22,27 @@ const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async () => {
-    if (!email || !password) {
-      toast.warning("Email, Username and password are required");
-      return;
-    }
-
-    if (!email.includes("@")) {
-      toast.error("Invalid email format");
-      return;
-    }
-
-    if (password.length < 6) {
-      toast.error("Password should be at least 6 characters long");
-      return;
-    }
+    setIsLoading(true);
 
     try {
-      setIsLoading(true);
-
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          // credentials: "include",
-          body: JSON.stringify({ email, password }),
-        }
-      );
-
-      if (!response.ok) {
-        const data = await response.json();
-        toast.error(data.message);
-        return;
+      if (!email || !password) {
+        throw new Error("Email and password are required.");
       }
 
-      const data = await response.json();
-      dispatch(setUser(data));
-      localStorage.setItem("token", data.token);
+      if (!email.includes("@")) {
+        throw new Error("Invalid email format.");
+      }
 
-      toast.success("Welcome Back! You are now signed up!");
+      const response = await loginUser(email, password);
 
-      setEmail("");
-      setPassword("");
+      if (response) {
+        toast.success("User created successfully.");
+      }
+
       setIsLoading(false);
-      router.push("/dashboard");
-    } catch (error) {
+    } catch (err) {
+      toast.error(err.message);
       setIsLoading(false);
-      toast.error("Something went wrong");
     }
   };
 

@@ -11,10 +11,10 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 import FormInput from "@/components/ui/FormInput";
 import { setUser } from "@/redux/slice/userSlice";
+import useUser from "@/hooks/useUser";
 
 const SignUpForm = () => {
-  const router = useRouter();
-  const dispatch = useDispatch();
+  const { signUpUser } = useUser();
 
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -25,55 +25,35 @@ const SignUpForm = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSignUp = async () => {
-    if (!email || !password || !username) {
-      toast.warning("Email, Username and password are required");
-      return;
-    }
-
-    if (username.length < 3) {
-      toast.error("Username should be at least 3 characters long");
-      return;
-    }
-
-    if (!email.includes("@")) {
-      toast.error("Invalid email format");
-      return;
-    }
-
-    if (password.length < 6) {
-      toast.error("Password should be at least 6 characters long");
-      return;
-    }
+    setIsLoading(true);
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          // credentials: "include",
-          body: JSON.stringify({ email, password, username }),
-        }
-      );
-
-      if (!response.ok) {
-        const data = await response.json();
-        toast.error(data.message);
-        return;
+      if (!email || !password || !username) {
+        throw new Error("Email, Username and password are required");
       }
 
-      const data = await response.json();
-      dispatch(setUser(data));
+      if (username.length < 3) {
+        throw new Error("Username should be at least 3 characters long");
+      }
 
-      localStorage.setItem("token", data.token);
+      if (!email.includes("@")) {
+        throw new Error("Invalid email format");
+      }
 
-      toast.success("User created successfully");
+      if (password.length < 6) {
+        throw new Error("Password should be at least 6 characters long");
+      }
 
-      router.push("/dashboard");
+      const response = await signUpUser({ email, username, password });
+
+      if (response) {
+        toast.success("User created successfully.");
+      }
+
+      setIsLoading(false);
     } catch (error) {
-      console.error("Error signing up:", error);
+      toast.error(error.message);
+      setIsLoading(false);
     }
   };
 
