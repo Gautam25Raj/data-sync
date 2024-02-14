@@ -1,10 +1,14 @@
 "use client";
 
 import { toast } from "sonner";
-import { useState } from "react";
 import { useDispatch } from "react-redux";
 
-import { addChannel, setChannels } from "@/redux/slice/channelSlice";
+import {
+  addChannel,
+  setChannels,
+  updateChannels,
+  deleteChannels,
+} from "@/redux/slice/channelSlice";
 
 const useChannel = () => {
   const dispatch = useDispatch();
@@ -21,6 +25,11 @@ const useChannel = () => {
           },
         }
       );
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error);
+      }
 
       const channelsData = await response.json();
       dispatch(setChannels(channelsData));
@@ -44,7 +53,8 @@ const useChannel = () => {
       );
 
       if (!response.ok) {
-        toast.error("Error creating channel");
+        const data = await response.json();
+        throw new Error(data.error);
       }
 
       const newChannel = await response.json();
@@ -54,7 +64,54 @@ const useChannel = () => {
     }
   };
 
-  return { getChannels, createChannel };
+  const updateChannel = async (id, name, users) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/channel/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({ name, users }),
+        }
+      );
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error);
+      }
+
+      const updatedChannel = await response.json();
+      dispatch(updateChannels(updatedChannel));
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
+  const deleteChannel = async (id) => {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/channel/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data.error);
+    }
+
+    const deleteChannel = await response.json();
+    dispatch(deleteChannels(deleteChannel));
+  };
+
+  return { getChannels, createChannel, updateChannel, deleteChannel };
 };
 
 export default useChannel;

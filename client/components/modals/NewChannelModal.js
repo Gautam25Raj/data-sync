@@ -10,14 +10,17 @@ import {
 } from "@material-tailwind/react";
 import { IoClose } from "react-icons/io5";
 
+import { toast } from "sonner";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 import useChannel from "@/hooks/useChannel";
 
+import { togglenewChannelModal } from "@/redux/slice/modalSlice";
+
 import FormInput from "../ui/FormInput";
 import FormTextarea from "../ui/FormTextarea";
-import { useDispatch, useSelector } from "react-redux";
-import { togglenewChannelModal } from "@/redux/slice/modalSlice";
 
 const NewChannelModal = () => {
   const dispatch = useDispatch();
@@ -26,6 +29,8 @@ const NewChannelModal = () => {
   const [channelName, setChannelName] = useState("");
   const [channelUsers, setChannelUsers] = useState([]);
 
+  const [isLoaded, setIsLoaded] = useState(false);
+
   const open = useSelector((state) => state.modal.newChannelModal);
 
   const handleOpen = () => {
@@ -33,9 +38,27 @@ const NewChannelModal = () => {
   };
 
   const handleCreateChannel = async () => {
-    const usersArray = channelUsers.split(",").map((user) => user.trim());
+    setIsLoaded(true);
 
-    await createChannel(channelName, usersArray);
+    try {
+      if (!channelName) {
+        throw new Error("Channel name is required");
+      }
+
+      if (channelUsers.length < 1 || !channelUsers) {
+        throw new Error("Cannot create channel without users.");
+      }
+
+      const usersArray = channelUsers.split(",").map((user) => user.trim());
+
+      await createChannel(channelName, usersArray);
+
+      setIsLoaded(false);
+      handleOpen();
+    } catch (err) {
+      toast.error(err.message);
+      setIsLoaded(false);
+    }
   };
 
   return (
@@ -94,7 +117,11 @@ const NewChannelModal = () => {
         </Button>
 
         <Button variant="gradient" color="gray" onClick={handleCreateChannel}>
-          Create Channel
+          {isLoaded ? (
+            <AiOutlineLoading3Quarters className="mx-auto animate-spin" />
+          ) : (
+            "Create Channel"
+          )}
         </Button>
       </DialogFooter>
     </Dialog>

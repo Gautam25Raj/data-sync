@@ -1,24 +1,27 @@
 const Channel = require("../models/Channel");
+const User = require("../models/User");
 
 const getChannel = async (req, res) => {
   const { id } = req.params;
   const currentUser = req.userData;
 
-  if (!id) return res.status(400).json({ message: "Channel ID is required" });
-
   try {
+    if (!id) {
+      throw new Error("Channel ID is required");
+    }
+
+    if (!currentUser || !currentUser.id) {
+      throw new Error("Invalid user data");
+    }
+
     const channel = await Channel.findById(id).populate("users", "-password");
 
     if (!channel) {
-      return res.status(404).json({
-        message: "Channel not found",
-      });
+      throw new Error("Channel not found");
     }
 
     if (channel.admin.toString() !== currentUser.id) {
-      return res.status(403).json({
-        message: "You are not authorized to view this channel",
-      });
+      throw new Error("You are not authorized to view this channel");
     }
 
     res.status(200).json(channel);
@@ -34,7 +37,13 @@ const getChannels = async (req, res) => {
   const currentUser = req.userData;
 
   try {
-    const channels = await Channel.find({ admin: currentUser.id });
+    if (!currentUser || !currentUser.id) {
+      throw new Error("Invalid user data");
+    }
+
+    const channels = await Channel.find({ admin: currentUser.id }).select(
+      "-admin"
+    );
 
     res.status(200).json(channels);
   } catch (error) {
@@ -53,41 +62,46 @@ const createChannel = async (req, res) => {
     const userChannels = await Channel.find({ admin: currentUser.id });
 
     if (userChannels.length >= 2) {
-      return res.status(400).json({
-        message: "You have already created 2 channels",
-      });
+      throw new Error("You cannot create more than 2 channels.");
     }
 
     if (!name) {
-      return res.status(400).json({
-        message: "Name is required",
-      });
-    }
-
-    const existingChannel = await Channel.findOne({ name });
-    if (existingChannel) {
-      return res.status(400).json({
-        message: "A channel with this name already exists",
-      });
+      throw new Error("Name is required");
     }
 
     if (!Array.isArray(users)) {
-      return res.status(400).json({
-        message: "Users must be an array",
-      });
+      throw new Error("Users must be an array");
     }
 
-    if (!users.includes(currentUser.id)) {
-      users.push(currentUser.id);
+    const userIds = [];
+    for (let user of users) {
+      let foundUser;
+      if (user.includes("@")) {
+        foundUser = await User.findOne({ email: user });
+        if (!foundUser) {
+          throw new Error(`User with email ${user} not found`);
+        }
+      } else {
+        foundUser = await User.findOne({ username: user });
+        if (!foundUser) {
+          throw new Error(`User with username ${user} not found`);
+        }
+      }
+      userIds.push(foundUser._id);
+    }
+
+    if (!userIds.includes(currentUser.id)) {
+      userIds.push(currentUser.id);
     }
 
     const newChannel = new Channel({
       name,
-      users,
+      users: userIds,
       admin: currentUser.id,
     });
 
-    await newChannel.save();
+    const channel = await newChannel.save();
+    channel.admin = undefined;
 
     res.status(201).json(newChannel);
   } catch (error) {
@@ -103,39 +117,60 @@ const updateChannel = async (req, res) => {
   const currentUser = req.userData;
   const { name, users = [] } = req.body;
 
-  if (!name) {
-    return res.status(400).json({
-      message: "Name is required",
-    });
-  }
-
   try {
+    if (!id) {
+      throw new Error("Channel ID is required");
+    }
+
+    if (!currentUser || !currentUser.id) {
+      throw new Error("Invalid user data");
+    }
+
+    if (!name) {
+      throw new Error("Name is required");
+    }
+
     let channel = await Channel.findById(id);
 
     if (!channel) {
-      return res.status(404).json({
-        message: "Channel not found",
-      });
+      throw new Error("Channel not found");
     }
 
     if (channel.admin.toString() !== currentUser.id) {
-      return res.status(403).json({
-        message: "You are not authorized to update this channel",
-      });
+      throw new Error("You are not authorized to update this channel");
     }
 
-    if (!users.includes(currentUser.id)) {
-      users.push(currentUser.id);
+    const userIds = [];
+    for (let user of users) {
+      let foundUser;
+      if (user.includes("@")) {
+        foundUser = await User.findOne({ email: user });
+        if (!foundUser) {
+          throw new Error(`User with email ${user} not found`);
+        }
+      } else {
+        foundUser = await User.findOne({ username: user });
+        if (!foundUser) {
+          throw new Error(`User with username ${user} not found`);
+        }
+      }
+      userIds.push(foundUser._id);
     }
 
-    channel = await Channel.findByIdAndUpdate(id, req.body, {
-      new: true,
-    });
+    if (!userIds.includes(currentUser.id)) {
+      userIds.push(currentUser.id);
+    }
 
-    res.status(200).json({
-      message: "Channel updated successfully",
-      channel,
-    });
+    channel = await Channel.findByIdAndUpdate(
+      id,
+      { name, userIds },
+      {
+        new: true,
+      }
+    );
+    channel.admin = undefined;
+
+    res.status(200).json(channel);
   } catch (error) {
     res.status(500).json({
       message: "Error updating channel",
@@ -149,18 +184,22 @@ const deleteChannel = async (req, res) => {
   const currentUser = req.userData;
 
   try {
+    if (!id) {
+      throw new Error("Channel ID is required");
+    }
+
+    if (!currentUser || !currentUser.id) {
+      throw new Error("Invalid user data");
+    }
+
     const channel = await Channel.findById(id);
 
     if (!channel) {
-      return res.status(404).json({
-        message: "Channel not found",
-      });
+      throw new Error("Channel not found");
     }
 
     if (channel.admin.toString() !== currentUser.id) {
-      return res.status(403).json({
-        message: "You are not authorized to delete this channel",
-      });
+      throw new Error("You are not authorized to delete this channel");
     }
 
     await Channel.deleteOne({ _id: id });

@@ -17,13 +17,30 @@ const channelSlice = createSlice({
       state.channels.push(action.payload);
     },
 
+    updateChannels: (state, action) => {
+      state.channels = state.channels.map((channel) =>
+        channel._id === action.payload._id ? action.payload : channel
+      );
+    },
+
+    deleteChannels: (state, action) => {
+      state.channels = state.channels.filter(
+        (channel) => channel._id !== action.payload
+      );
+    },
+
     setCurrentChannel: (state, action) => {
       state.currentChannel = action.payload;
     },
   },
 });
 
-export const { setChannels, addChannel, setCurrentChannel } =
-  channelSlice.actions;
+export const {
+  setChannels,
+  addChannel,
+  updateChannels,
+  deleteChannels,
+  setCurrentChannel,
+} = channelSlice.actions;
 
 export default channelSlice.reducer;

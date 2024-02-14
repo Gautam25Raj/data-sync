@@ -7,10 +7,13 @@ import { useEffect, useState } from "react";
 import useChannel from "@/hooks/useChannel";
 
 import SideNavItem from "@/components/sidebar/SideNavItem";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { setCurrentChannel } from "@/redux/slice/channelSlice";
 
 const ChannelBtn = ({ activeItem, handleItemClick }) => {
+  const dispatch = useDispatch();
+
   const { getChannels } = useChannel();
 
   const [loading, setLoading] = useState(true);
@@ -22,6 +25,11 @@ const ChannelBtn = ({ activeItem, handleItemClick }) => {
       setLoading(false);
     });
   }, []);
+
+  const handleChannelClick = (channel) => {
+    handleItemClick(channel._id);
+    dispatch(setCurrentChannel(channel));
+  };
 
   return (
     <>
@@ -41,9 +49,7 @@ const ChannelBtn = ({ activeItem, handleItemClick }) => {
             href={`/channel/${channel._id}`}
             icon={<CloudIcon className="text-black bg-black" />}
             active={activeItem === channel._id}
-            onClick={() => {
-              handleItemClick(channel._id);
-            }}
+            onClick={() => handleChannelClick(channel)}
           />
         ))
       )}
