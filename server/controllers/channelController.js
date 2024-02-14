@@ -36,12 +36,6 @@ const getChannels = async (req, res) => {
   try {
     const channels = await Channel.find({ admin: currentUser.id });
 
-    if (!channels || channels.length === 0) {
-      return res.status(404).json({
-        message: "No channels found for the current user",
-      });
-    }
-
     res.status(200).json(channels);
   } catch (error) {
     res.status(500).json({
@@ -56,6 +50,14 @@ const createChannel = async (req, res) => {
   const currentUser = req.userData;
 
   try {
+    const userChannels = await Channel.find({ admin: currentUser.id });
+
+    if (userChannels.length >= 2) {
+      return res.status(400).json({
+        message: "You have already created 2 channels",
+      });
+    }
+
     if (!name) {
       return res.status(400).json({
         message: "Name is required",

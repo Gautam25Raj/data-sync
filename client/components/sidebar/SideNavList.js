@@ -1,15 +1,13 @@
 "use client";
 
-import {
-  CloudIcon,
-  PlusCircleIcon,
-  RectangleGroupIcon,
-} from "@heroicons/react/24/outline";
+import { RectangleGroupIcon } from "@heroicons/react/24/outline";
 
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import SideNavItem from "./SideNavItem";
+import ChannelBtn from "../ui/buttons/ChannelBtn";
+import CreateChannelBtn from "../ui/buttons/CreateChannelBtn";
 
 const SideNavList = () => {
   const pathname = usePathname();
@@ -38,39 +36,11 @@ const SideNavList = () => {
         }}
       />
 
-      <SideNavItem
-        label="Create Channel"
-        href="/createChannel"
-        icon={<PlusCircleIcon />}
-        active={activeItem === "createChannel"}
-        onClick={() => {
-          handleItemClick("createChannel");
-        }}
-      />
+      <CreateChannelBtn />
 
       <hr className="my-2 border-gray-500" />
 
-      <p className="text-sm text-gray-500">Channels</p>
-
-      <SideNavItem
-        label="Channel 1"
-        href="/channel1"
-        icon={<CloudIcon />}
-        active={activeItem === "channel1"}
-        onClick={() => {
-          handleItemClick("channel1");
-        }}
-      />
-
-      <SideNavItem
-        label="Channel 2"
-        href="/channel2"
-        icon={<CloudIcon />}
-        active={activeItem === "channel2"}
-        onClick={() => {
-          handleItemClick("channel2");
-        }}
-      />
+      <ChannelBtn activeItem={activeItem} handleItemClick={handleItemClick} />
     </>
   );
 };
