@@ -125,11 +125,25 @@ exports.updateUser = async (req, res) => {
       user.password = hashedPassword;
     }
 
+    const token = jwt.sign(
+      { id: user._id, email: user.email, username: user.username },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1d",
+      }
+    );
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      maxAge: 3600000,
+    });
+
     const updatedUser = await user.save();
 
     updatedUser.password = undefined;
 
-    res.status(200).json({ data: updatedUser });
+    res.status(200).json({ token: token, data: updatedUser });
   } catch (err) {
     res
       .status(500)

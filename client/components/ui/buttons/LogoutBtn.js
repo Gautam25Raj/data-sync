@@ -3,37 +3,21 @@
 import { ArrowLeftStartOnRectangleIcon } from "@heroicons/react/24/outline";
 
 import { toast } from "sonner";
-import { useDispatch } from "react-redux";
 
-import { clearUser } from "@/redux/slice/userSlice";
+import useUser from "@/hooks/useUser";
 
 import SideNavItem from "../../sidebar/SideNavItem";
 
 const LogoutBtn = () => {
-  const dispatch = useDispatch();
+  const { logoutUser } = useUser();
 
   const handleLogout = async () => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/logout`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        }
-      );
+      const response = await logoutUser();
 
-      if (!response.ok) {
-        const data = await response.json();
-        toast.error(data.message);
-        return;
+      if (response) {
+        toast.success("User Logout successfully.");
       }
-
-      localStorage.removeItem("token");
-      toast.success("Logged out successfully.");
-      dispatch(clearUser(null));
     } catch (error) {
       toast.error("Error logging out.");
     }

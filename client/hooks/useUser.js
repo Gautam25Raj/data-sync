@@ -1,14 +1,16 @@
 "use client";
 
 import { toast } from "sonner";
-import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
 
-import { setUser } from "@/redux/slice/userSlice";
+import { clearUser, setUser } from "@/redux/slice/userSlice";
 
 const useUser = () => {
-  const dispatch = useDispatch();
   const router = useRouter();
+  const dispatch = useDispatch();
+
+  const currentUser = useSelector((state) => state.user.user);
 
   const getUser = async () => {
     try {
@@ -29,10 +31,9 @@ const useUser = () => {
 
       const userData = await response.json();
 
-      return userData;
+      return userData.data;
     } catch (err) {
       toast.error(err.message);
-      return null;
     }
   };
 
@@ -76,7 +77,7 @@ const useUser = () => {
       }
 
       const data = await response.json();
-      dispatch(setUser(data));
+      dispatch(setUser(data.data));
 
       localStorage.setItem("token", data.token);
 
@@ -108,18 +109,109 @@ const useUser = () => {
       }
 
       const data = await response.json();
-      dispatch(setUser(data));
+      dispatch(setUser(data.data));
       localStorage.setItem("token", data.token);
 
       toast.success("Welcome Back! You are now signed up!");
 
       router.push("/dashboard");
     } catch (error) {
-      throw new Error(error.message);
+      toast.error(error.message);
     }
   };
 
-  return { getUser, signUpUser, loginUser };
+  const updatedUser = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/${currentUser._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+          // credentials: "include",
+          body: JSON.stringify(currentUser),
+        }
+      );
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error);
+      }
+
+      const data = await response.json();
+      dispatch(setUser(data.data));
+      localStorage.setItem("token", data.token);
+
+      toast.success("User updated successfully");
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const deleteUser = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/${currentUser._id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+          // credentials: "include",
+        }
+      );
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error);
+      }
+
+      dispatch(clearUser());
+      localStorage.removeItem("token");
+
+      toast.success("User deleted successfully");
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const logoutUser = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/logout`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error);
+      }
+
+      localStorage.removeItem("token");
+      dispatch(clearUser(null));
+      toast.success("Logged out successfully.");
+    } catch (error) {
+      toast.error("Error logging out.");
+    }
+  };
+
+  return {
+    getUser,
+    signUpUser,
+    loginUser,
+    updatedUser,
+    deleteUser,
+    logoutUser,
+  };
 };
 
 export default useUser;
