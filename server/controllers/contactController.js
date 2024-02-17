@@ -1,3 +1,4 @@
+const User = require("../models/User");
 const Chat = require("../models/Contact");
 const Message = require("../models/Message");
 
@@ -33,31 +34,41 @@ const createChats = async (req, res) => {
       throw new Error("User Id is required.");
     }
 
-    if (!message) {
-      throw new Error("Message is required.");
-    }
-
     if (!currentUser) {
       throw new Error("User not authenticated.");
+    }
+
+    let foundUser = null;
+
+    if (userId.includes("@")) {
+      foundUser = await User.findOne({ email: userId }).select("_id");
+
+      if (!foundUser) {
+        throw new Error(`User with email ${userId} not found`);
+      }
+    } else {
+      foundUser = await User.findOne({ username: userId }).select("_id");
+
+      if (!foundUser) {
+        throw new Error(`User with username ${userId} not found`);
+      }
     }
 
     const existingChat = await Chat.findOne({
       $and: [
         { users: { $elemMatch: { $eq: currentUser.id } } },
-        { users: { $elemMatch: { $eq: userId } } },
+        { users: { $elemMatch: { $eq: foundUser } } },
       ],
-    }).populate("latestMessage", "content");
+    });
 
     if (existingChat) {
-      res.status(200).json(existingChat);
+      throw new Error("Chat already exists.");
     } else {
       const chatData = {
-        users: [currentUser.id, userId],
+        users: [currentUser.id, foundUser],
       };
 
       let createdChat = await Chat.create(chatData);
-
-      let latestMessage = null;
 
       if (message) {
         const createdMessage = await Message.create({
@@ -66,18 +77,32 @@ const createChats = async (req, res) => {
           content: message,
           chat: createdChat._id,
         });
-        latestMessage = createdMessage;
 
         await Chat.updateOne(
           { _id: createdChat._id },
-          { latestMessage: latestMessage._id }
+          { latestMessage: createdMessage._id }
         );
+
+        createdChat = await Chat.findById(createdChat._id).populate(
+          "users",
+          "username"
+        );
+
+        return res.status(200).json({
+          _id: createdChat._id,
+          users: createdChat.users,
+          latestMessage: { content: createdMessage.content },
+        });
       }
+
+      createdChat = await Chat.findById(createdChat._id).populate(
+        "users",
+        "username"
+      );
 
       res.status(200).json({
         _id: createdChat._id,
         users: createdChat.users,
-        latestMessage: { content: latestMessage.content },
       });
     }
   } catch (error) {

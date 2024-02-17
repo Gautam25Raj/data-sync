@@ -19,7 +19,7 @@ const FormTextarea = ({
         htmlFor={id}
         variant="small"
         color="gray"
-        className="mb-2 font-medium cursor-default prevent-select"
+        className="mb-2 font-semibold cursor-default prevent-select"
       >
         {label}
         {required && <span className="text-red-500">*</span>}

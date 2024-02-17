@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import Avatar, { genConfig } from "react-nice-avatar";
 import { useDispatch, useSelector } from "react-redux";
 
+import { setSelectedContact } from "@/redux/slice/contactSlice";
+
 // import {
 //   setSelectedContact,
 //   setSelectedPresence,
@@ -24,9 +26,9 @@ const ContactsItem = ({ chat }) => {
 
   useEffect(() => {
     if (chat.users[0]._id === currentUser.id) {
-      setUser(chat.users[1]);
-    } else {
       setUser(chat.users[0]);
+    } else {
+      setUser(chat.users[1]);
     }
   }, [chat]);
 

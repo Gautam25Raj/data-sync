@@ -1,7 +1,7 @@
 "use client";
 
-const { toast } = require("sonner");
-const { useDispatch } = require("react-redux");
+import { toast } from "sonner";
+import { useDispatch } from "react-redux";
 
 const {
   addContact,
@@ -34,7 +34,6 @@ const useContact = () => {
       const chats = await response.json();
       dispatch(setContacts(chats));
       dispatch(setOriginalContacts(chats));
-      toast.success("Chats fetched successfully");
 
       return chats;
     } catch (err) {
@@ -64,8 +63,8 @@ const useContact = () => {
       const chat = await response.json();
       dispatch(addContact(chat));
       dispatch(addOriginalContact(chat));
-      toast.success("Chat created successfully");
 
+      toast.success("Chat created successfully");
       return chat;
     } catch (err) {
       toast.error(err.message);

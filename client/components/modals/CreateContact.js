@@ -9,6 +9,9 @@ import {
   CardBody,
   CardFooter,
   Typography,
+  CardHeader,
+  DialogHeader,
+  DialogBody,
 } from "@material-tailwind/react";
 
 import { toast } from "sonner";
@@ -18,13 +21,10 @@ import { useDispatch, useSelector } from "react-redux";
 import useContact from "@/hooks/useContact";
 
 import { toggleNewContactModal } from "@/redux/slice/modalSlice";
-import { addContact, addOriginalContact } from "@/redux/slice/contactSlice";
-import { Urbanist } from "next/font/google";
-
-const urbanist = Urbanist({
-  subsets: ["latin"],
-  display: "swap",
-});
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import FormTextarea from "../ui/FormTextarea";
+import FormInput from "../ui/FormInput";
+import { IoClose } from "react-icons/io5";
 
 const CreateContact = () => {
   const dispatch = useDispatch();
@@ -36,21 +36,26 @@ const CreateContact = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const currentUser = useSelector((state) => state.user.user);
   const open = useSelector((state) => state.modal.newContactModal);
 
   const handleOpen = () => {
-    dispatch(toggleNewContactModal(false));
+    dispatch(toggleNewContactModal());
   };
 
   const handleCreateContact = async () => {
     try {
       setIsLoading(true);
 
-      await createChats(userId, message);
+      const response = await createChats(userId, message);
+      console.log(response);
+
+      if (response) {
+        handleOpen();
+        setUserId("");
+        setMessage("");
+      }
 
       setIsLoading(false);
-      handleOpen();
     } catch (err) {
       toast.error("Failed to create contact");
     }
@@ -65,58 +70,61 @@ const CreateContact = () => {
         className={"bg-transparent shadow-none"}
       >
         <Card className="mx-auto w-full max-w-[24rem]">
-          <CardBody className={"flex flex-col gap-4 " + urbanist.className}>
-            <Typography
-              variant="h4"
-              color="blue-gray"
-              className={urbanist.className}
-            >
+          <DialogHeader className="justify-between">
+            <Typography variant="h4" color="blue-gray">
               Create New Contact
             </Typography>
 
+            <Button
+              onClick={handleOpen}
+              className="bg-transparent p-1 shadow-none hover:shadow-none hover:bg-gray-200"
+            >
+              <IoClose className="h-6 w-6 text-black" />
+            </Button>
+          </DialogHeader>
+
+          <DialogBody className="flex flex-col gap-4 !-mt-6">
             <Typography
-              className={"mb-3 font-normal " + urbanist.className}
+              className={"mb-3 font-normal"}
               variant="paragraph"
               color="gray"
             >
-              Enter the address and message to create contact.
+              Enter the username or email and a welcome message to create
+              contact.
             </Typography>
 
-            <Typography
-              variant="h6"
-              className={"-mb-2 -mt-2 " + urbanist.className}
-            >
-              Address
-            </Typography>
-            <Input
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              label="Address"
-              required
-              size="lg"
-              className={urbanist.className}
+            <FormInput
+              label="Username or Email"
+              id={"usernameOrEmail"}
+              type={"text"}
+              placeholder={"Username or Email"}
+              input={userId}
+              setInput={setUserId}
+              required={true}
             />
 
-            <Typography className={"-mb-2 " + urbanist.className} variant="h6">
-              Message (Optional)
-            </Typography>
-            <Textarea
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
+            <FormTextarea
               label="Message"
-              size="lg"
-              className={urbanist.className}
+              type={"text"}
+              placeholder={"Message"}
+              id={"newContactMessage"}
+              input={message}
+              setInput={setMessage}
+              required={false}
             />
-          </CardBody>
+          </DialogBody>
 
-          <CardFooter className="pt-0">
-            <Button
-              variant="gradient"
-              onClick={handleCreateContact}
-              className={urbanist.className}
-              fullWidth
-            >
-              Create
+          <CardFooter className="pt-0 flex justify-end gap-2">
+            <Button variant="outlined" color="red" onClick={handleOpen}>
+              Cancel
+            </Button>
+
+            <Button variant="gradient" onClick={handleCreateContact}>
+              {isLoading ? (
+                <AiOutlineLoading3Quarters className="mx-auto animate-spin w-12" />
+              ) : (
+                "Create"
+              )}
             </Button>
           </CardFooter>
         </Card>
