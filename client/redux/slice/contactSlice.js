@@ -5,8 +5,9 @@ const contactSlice = createSlice({
 
   initialState: {
     contacts: [],
-    originalContacts: [{ name: "a" }],
+    isGroup: false,
     currentContacts: null,
+    originalContacts: [{ name: "a" }],
   },
 
   reducers: {
@@ -35,6 +36,14 @@ const contactSlice = createSlice({
     setSelectedContact(state, action) {
       state.currentContacts = action.payload;
     },
+
+    removeSelectedContact(state) {
+      state.currentContacts = null;
+    },
+
+    toggleGroup(state) {
+      state.isGroup = !state.isGroup;
+    },
   },
 });
 
@@ -45,6 +54,8 @@ export const {
   addOriginalContact,
   setOriginalContacts,
   setSelectedContact,
+  removeSelectedContact,
+  toggleGroup,
 } = contactSlice.actions;
 
 export default contactSlice.reducer;

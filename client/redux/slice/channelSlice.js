@@ -5,6 +5,7 @@ const channelSlice = createSlice({
 
   initialState: {
     channels: [],
+    joinedChannels: [],
     currentChannel: null,
   },
 
@@ -29,6 +30,20 @@ const channelSlice = createSlice({
       );
     },
 
+    setJoinedChannels: (state, action) => {
+      state.joinedChannels = action.payload;
+    },
+
+    addJoinedChannel: (state, action) => {
+      state.joinedChannels.push(action.payload);
+    },
+
+    leaveJoinedChannel: (state, action) => {
+      state.joinedChannels = state.joinedChannels.filter(
+        (channel) => channel._id !== action.payload
+      );
+    },
+
     setCurrentChannel: (state, action) => {
       state.currentChannel = action.payload;
     },
@@ -40,6 +55,9 @@ export const {
   addChannel,
   updateChannels,
   deleteChannels,
+  setJoinedChannels,
+  addJoinedChannel,
+  leaveJoinedChannel,
   setCurrentChannel,
 } = channelSlice.actions;
 

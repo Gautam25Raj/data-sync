@@ -27,8 +27,8 @@ const ContactsSearch = () => {
       const filteredContacts = originalContacts.filter((contact) => {
         const user =
           contact.users[0]._id === currentUser.id
-            ? contact.users[1].username
-            : contact.users[0].username;
+            ? contact.users[0].username
+            : contact.users[1].username;
 
         return user
           .toString()

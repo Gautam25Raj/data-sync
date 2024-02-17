@@ -1,4 +1,4 @@
-import Chat from "@/components/chat/Chat";
+import ChatContainer from "@/components/chat/ChatContainer";
 import Sidebar from "@/components/sidebar/Sidebar";
 
 import CreateContact from "@/components/modals/CreateContact";
@@ -11,7 +11,7 @@ const HomeLayout = () => {
         <NewChannelModal />
         <CreateContact />
         <Sidebar />
-        <Chat />
+        <ChatContainer />
       </div>
     </>
   );
