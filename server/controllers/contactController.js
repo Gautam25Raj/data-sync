@@ -13,6 +13,7 @@ const fetchChats = async (req, res) => {
       users: { $elemMatch: { $eq: currentUser.id } },
     })
       .populate("latestMessage", "content -_id")
+      .populate("users", "username")
       .select("_id users latestMessage type");
 
     res.status(200).json(chats);

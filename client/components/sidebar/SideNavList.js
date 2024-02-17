@@ -2,8 +2,8 @@
 
 import { RectangleGroupIcon } from "@heroicons/react/24/outline";
 
-import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 import SideNavItem from "./SideNavItem";
 import ChannelBtn from "../ui/buttons/ChannelBtn";

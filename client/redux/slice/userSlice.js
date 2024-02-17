@@ -4,7 +4,11 @@ const userSlice = createSlice({
   name: "user",
 
   initialState: {
-    user: null,
+    user: {
+      _id: "65cd2ba91a2b26cb78a132cb",
+      email: "gautam@gg.com",
+      username: "gautam",
+    },
   },
 
   reducers: {

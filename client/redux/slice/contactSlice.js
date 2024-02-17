@@ -5,8 +5,8 @@ const contactSlice = createSlice({
 
   initialState: {
     contacts: [],
-    currentContact: null,
-    originalContacts: [],
+    originalContacts: [{ name: "a" }],
+    currentContacts: null,
   },
 
   reducers: {
@@ -33,7 +33,7 @@ const contactSlice = createSlice({
     },
 
     setSelectedContact(state, action) {
-      state.selectedContact = action.payload;
+      state.currentContacts = action.payload;
     },
   },
 });
