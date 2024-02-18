@@ -91,7 +91,13 @@ const ContactsItem = ({ chat }) => {
   // }, [user]);
 
   const handleContactClick = () => {
-    dispatch(setSelectedContact(chat));
+    dispatch(
+      setSelectedContact({
+        username: user.username,
+        _id: user._id,
+        chatId: chat._id,
+      })
+    );
   };
 
   return (

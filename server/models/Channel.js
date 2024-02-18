@@ -20,7 +20,10 @@ const channelSchema = new mongoose.Schema(
     },
   },
 
-  { versionKey: false }
+  {
+    versionKey: false,
+    timestamps: true,
+  }
 );
 
 module.exports = Channel = mongoose.model("Channel", channelSchema);

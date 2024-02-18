@@ -16,9 +16,8 @@ const ChatSchema = new Schema(
     },
   },
 
-  { versionKey: false },
-
   {
+    versionKey: false,
     timestamps: true,
   }
 );

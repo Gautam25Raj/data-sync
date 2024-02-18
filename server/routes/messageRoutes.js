@@ -16,8 +16,8 @@ const {
 } = require("../controllers/messageController");
 
 router.route("/:messageId").get(authenticate, fetchMessage);
-router.route("/chats/:chatId").get(authenticate, fetchChatMessages);
-router.route("/channels/:channelId").get(authenticate, fetchChannelMessages);
+router.route("/chat/:chatId").get(authenticate, fetchChatMessages);
+router.route("/channel/:channelId").get(authenticate, fetchChannelMessages);
 router.route("/:chatId/latest-message").get(authenticate, fetchLatestMessage);
 
 router.route("/chat").post(authenticate, sendChatMessage);

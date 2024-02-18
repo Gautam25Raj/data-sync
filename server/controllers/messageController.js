@@ -63,14 +63,16 @@ exports.fetchChannelMessages = async (req, res) => {
     }
 
     const channelExists = await Channel.findById(channelId);
+    console.log(channelExists);
 
     if (!channelExists) {
       throw new Error("Channel not found.");
     }
 
-    const messages = await Message.find({ chat: channelId })
+    const messages = await Message.find({ channel: channelId })
       .sort("createdAt")
       .populate("sender", "username");
+    console.log(messages);
 
     if (!messages) {
       throw new Error("No messages found for this channel.");

@@ -20,6 +20,7 @@ const MessageInput = () => {
 
   const isGroup = useSelector((state) => state.contact.isGroup);
   const currentContact = useSelector((state) => state.contact.currentContact);
+  const currentChannel = useSelector((state) => state.channel.currentChannel);
 
   useEffect(() => {
     if (textareaRef.current.scrollHeight < 224) {
@@ -32,7 +33,7 @@ const MessageInput = () => {
     e.preventDefault();
 
     try {
-      if (!currentContact) {
+      if (!currentContact && !currentChannel) {
         toast.error("Please select a contact first.");
         return;
       }
@@ -45,9 +46,9 @@ const MessageInput = () => {
       setDisabled(true);
 
       if (isGroup) {
-        createChannelMessage(currentContact._id, message);
+        createChannelMessage(currentChannel._id, message);
       } else {
-        createChatMessage(currentContact._id, message);
+        createChatMessage(currentContact.chatId, message);
       }
 
       setMessage("");
