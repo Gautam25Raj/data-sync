@@ -103,7 +103,7 @@ const ContactsItem = ({ chat }) => {
         <div className="w-10 h-10 mr-3 relative">
           <Avatar
             style={{ width: "40px", height: "40px" }}
-            {...genConfig(user ? user.username : "user")}
+            {...genConfig(user ? user._id : "user")}
           />
         </div>
 

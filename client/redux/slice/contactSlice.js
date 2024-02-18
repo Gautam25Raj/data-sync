@@ -6,8 +6,8 @@ const contactSlice = createSlice({
   initialState: {
     contacts: [],
     isGroup: false,
-    currentContacts: null,
-    originalContacts: [{ name: "a" }],
+    currentContact: null,
+    originalContacts: [],
   },
 
   reducers: {
@@ -34,11 +34,11 @@ const contactSlice = createSlice({
     },
 
     setSelectedContact(state, action) {
-      state.currentContacts = action.payload;
+      state.currentContact = action.payload;
     },
 
     removeSelectedContact(state) {
-      state.currentContacts = null;
+      state.currentContact = null;
     },
 
     toggleGroup(state) {

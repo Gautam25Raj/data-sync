@@ -15,6 +15,7 @@ import ContactsSearch from "./contacts/ContactsSearch";
 
 import ContactsBtn from "../ui/buttons/ContactsBtn";
 import ChannelGroupBtn from "../ui/buttons/ChannelGroupBtn";
+import SendMessageContainer from "./message/SendMessageContainer";
 
 const ChatContainer = () => {
   const { fetchChats } = useContact();
@@ -81,6 +82,8 @@ const ChatContainer = () => {
             )}
           </div>
         </div>
+
+        <SendMessageContainer />
       </Card>
     </div>
   );

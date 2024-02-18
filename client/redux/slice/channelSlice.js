@@ -47,6 +47,10 @@ const channelSlice = createSlice({
     setCurrentChannel: (state, action) => {
       state.currentChannel = action.payload;
     },
+
+    removeCurrentChannel: (state) => {
+      state.currentChannel = null;
+    },
   },
 });
 
@@ -59,6 +63,7 @@ export const {
   addJoinedChannel,
   leaveJoinedChannel,
   setCurrentChannel,
+  removeCurrentChannel,
 } = channelSlice.actions;
 
 export default channelSlice.reducer;
