@@ -14,7 +14,7 @@ import { setCurrentChannel } from "@/redux/slice/channelSlice";
 const ChannelBtn = ({ activeItem, handleItemClick }) => {
   const dispatch = useDispatch();
 
-  const { getChannels } = useChannel();
+  const { getChannels, getJoinedChannels } = useChannel();
 
   const [loading, setLoading] = useState(true);
 

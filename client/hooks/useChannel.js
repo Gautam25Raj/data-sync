@@ -8,10 +8,36 @@ import {
   setChannels,
   updateChannels,
   deleteChannels,
+  setJoinedChannels,
 } from "@/redux/slice/channelSlice";
 
 const useChannel = () => {
   const dispatch = useDispatch();
+
+  const getChannel = async (id) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/channel/${id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error);
+      }
+
+      const channelData = await response.json();
+      return channelData;
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
 
   const getChannels = async () => {
     try {
@@ -33,6 +59,31 @@ const useChannel = () => {
 
       const channelsData = await response.json();
       dispatch(setChannels(channelsData));
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
+  const getJoinedChannels = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/channel/joined`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error);
+      }
+
+      const channelsData = await response.json();
+      dispatch(setJoinedChannels(channelsData));
     } catch (err) {
       toast.error(err.message);
     }
@@ -111,7 +162,14 @@ const useChannel = () => {
     dispatch(deleteChannels(deleteChannel));
   };
 
-  return { getChannels, createChannel, updateChannel, deleteChannel };
+  return {
+    getChannel,
+    getChannels,
+    getJoinedChannels,
+    createChannel,
+    updateChannel,
+    deleteChannel,
+  };
 };
 
 export default useChannel;

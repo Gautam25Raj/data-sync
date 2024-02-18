@@ -54,6 +54,24 @@ const getChannels = async (req, res) => {
   }
 };
 
+const getJoinedChannels = async (req, res) => {
+  const currentUser = req.userData;
+
+  try {
+    const channels = await Channel.find({
+      users: currentUser.id,
+      admin: { $ne: currentUser.id },
+    }).select("-admin");
+
+    res.status(200).json(channels);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching channels for this user.",
+      error: error.message,
+    });
+  }
+};
+
 const createChannel = async (req, res) => {
   const { name, users = [] } = req.body;
   const currentUser = req.userData;
@@ -221,4 +239,5 @@ module.exports = {
   createChannel,
   updateChannel,
   deleteChannel,
+  getJoinedChannels,
 };

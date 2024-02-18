@@ -1,37 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
-import { toast } from "sonner";
-import { useSelector } from "react-redux";
-
-import useContact from "@/hooks/useContact";
-
-import ContactsItem from "./ContactsItem";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
-const Contacts = () => {
-  const { fetchChats } = useContact();
+import { useSelector } from "react-redux";
 
-  const [isLoading, setIsLoading] = useState(false);
+import ContactsItem from "./ContactsItem";
 
+const Contacts = ({ isLoading }) => {
   const contacts = useSelector((state) => state.contact.contacts);
-
-  useEffect(() => {
-    const initializeChats = async () => {
-      try {
-        setIsLoading(true);
-
-        await fetchChats();
-
-        setIsLoading(false);
-      } catch (error) {
-        toast.error("Error loading contacts");
-      }
-    };
-
-    initializeChats();
-  }, []);
 
   return (
     <div className="relative flex flex-grow">
