@@ -6,8 +6,8 @@ import { useDispatch } from "react-redux";
 import {
   addChannel,
   setChannels,
-  updateChannels,
-  deleteChannels,
+  updateChannel as updateChannelRedux,
+  deleteChannel as deleteChannelRedux,
   setJoinedChannels,
 } from "@/redux/slice/channelSlice";
 
@@ -109,7 +109,11 @@ const useChannel = () => {
       }
 
       const newChannel = await response.json();
+
+      toast.success("Channel created successfully.");
       dispatch(addChannel(newChannel));
+
+      return newChannel;
     } catch (err) {
       toast.error(err.message);
     }
@@ -135,31 +139,35 @@ const useChannel = () => {
       }
 
       const updatedChannel = await response.json();
-      dispatch(updateChannels(updatedChannel));
+      dispatch(updateChannelRedux(updatedChannel));
     } catch (err) {
       toast.error(err.message);
     }
   };
 
   const deleteChannel = async (id) => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/channel/${id}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/channel/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error);
       }
-    );
 
-    if (!response.ok) {
-      const data = await response.json();
-      throw new Error(data.error);
+      const deleteChannel = await response.json();
+      dispatch(deleteChannelRedux(deleteChannel));
+    } catch (err) {
+      toast.error(err.message);
     }
-
-    const deleteChannel = await response.json();
-    dispatch(deleteChannels(deleteChannel));
   };
 
   return {

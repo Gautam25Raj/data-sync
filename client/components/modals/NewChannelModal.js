@@ -52,10 +52,12 @@ const NewChannelModal = () => {
       const usersArray = channelUsers.split(",").map((user) => user.trim());
 
       const response = await createChannel(channelName, usersArray);
+      console.log(response);
 
       if (response) {
-        toast.success("Channel created successfully.");
         handleOpen();
+        setChannelName("");
+        setChannelUsers([]);
       }
 
       setIsLoaded(false);

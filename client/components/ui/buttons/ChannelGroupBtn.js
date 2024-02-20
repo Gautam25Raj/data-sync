@@ -1,5 +1,7 @@
 "use client";
 
+import { MdOutlineFlipCameraAndroid } from "react-icons/md";
+
 import { useDispatch } from "react-redux";
 import { Button } from "@material-tailwind/react";
 
@@ -13,7 +15,12 @@ const ChannelGroupBtn = () => {
     dispatch(removeSelectedContact(null));
   };
 
-  return <Button onClick={handleChannelGroup}>Channel Groups</Button>;
+  return (
+    <Button onClick={handleChannelGroup} className="flex gap-2 justify-center">
+      <MdOutlineFlipCameraAndroid size={16} />
+      Channel Groups
+    </Button>
+  );
 };
 
 export default ChannelGroupBtn;

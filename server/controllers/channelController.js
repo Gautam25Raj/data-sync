@@ -1,5 +1,6 @@
 const Channel = require("../models/Channel");
 const User = require("../models/User");
+const Message = require("../models/Message");
 
 const getChannel = async (req, res) => {
   const { id } = req.params;
@@ -221,6 +222,7 @@ const deleteChannel = async (req, res) => {
     }
 
     await Channel.deleteOne({ _id: id });
+    await Message.deleteMany({ channel: id });
 
     res.status(200).json({
       message: "Channel deleted successfully",

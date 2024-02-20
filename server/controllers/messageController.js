@@ -41,10 +41,6 @@ exports.fetchChatMessages = async (req, res) => {
 
     const messages = await Message.find({ chat: chatId }).sort("createdAt");
 
-    if (!messages || messages.length === 0) {
-      throw new Error("No messages found for this chat.");
-    }
-
     res.status(200).json(messages);
   } catch (error) {
     res.status(500).json({
@@ -72,11 +68,6 @@ exports.fetchChannelMessages = async (req, res) => {
     const messages = await Message.find({ channel: channelId })
       .sort("createdAt")
       .populate("sender", "username");
-    console.log(messages);
-
-    if (!messages) {
-      throw new Error("No messages found for this channel.");
-    }
 
     res.status(200).json(messages);
   } catch (error) {

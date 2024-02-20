@@ -47,7 +47,6 @@ const CreateContact = () => {
       setIsLoading(true);
 
       const response = await createChats(userId, message);
-      console.log(response);
 
       if (response) {
         handleOpen();

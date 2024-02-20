@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 const {
   addContact,
   setContacts,
+  deleteContact,
   addOriginalContact,
   setOriginalContacts,
 } = require("@/redux/slice/contactSlice");
@@ -89,7 +90,7 @@ const useContact = () => {
         throw new Error(data.error);
       }
 
-      dispatch(removeContact(chatId));
+      dispatch(deleteContact(chatId));
       toast.success("Chat deleted successfully");
     } catch (err) {
       toast.error(err.message);

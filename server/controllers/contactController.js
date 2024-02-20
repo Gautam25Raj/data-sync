@@ -126,6 +126,8 @@ const deleteChat = async (req, res) => {
       throw new Error("Chat not found.");
     }
 
+    await Message.deleteMany({ chat: chatId });
+
     res.status(200).json({ message: "Chat deleted successfully." });
   } catch (error) {
     res
