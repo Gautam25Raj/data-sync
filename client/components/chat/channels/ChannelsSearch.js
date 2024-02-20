@@ -5,12 +5,14 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { setSearchedJoinedChannels } from "@/redux/slice/channelSlice";
+import { setJoinedChannels } from "@/redux/slice/channelSlice";
 
 const ChannelsSearch = () => {
   const dispatch = useDispatch();
 
-  const joinedChannels = useSelector((state) => state.channel.joinedChannels);
+  const searchedJoinedChannels = useSelector(
+    (state) => state.channel.searchedJoinedChannels
+  );
 
   const [input, setInput] = useState("");
 
@@ -19,16 +21,16 @@ const ChannelsSearch = () => {
     setInput(searchValue);
 
     if (searchValue.length <= 0) {
-      dispatch(setSearchedJoinedChannels(joinedChannels));
+      dispatch(setJoinedChannels(searchedJoinedChannels));
     } else {
-      const filteredChannel = joinedChannels.filter((channel) =>
+      const filteredChannel = searchedJoinedChannels.filter((channel) =>
         channel.name
           .toString()
           .toLowerCase()
           .includes(searchValue.toLowerCase())
       );
 
-      dispatch(setSearchedJoinedChannels(filteredChannel));
+      dispatch(setJoinedChannels(filteredChannel));
     }
   };
 
