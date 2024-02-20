@@ -9,6 +9,8 @@ import {
   updateChannel as updateChannelRedux,
   deleteChannel as deleteChannelRedux,
   setJoinedChannels,
+  leaveJoinedChannel,
+  setSearchedJoinedChannels,
 } from "@/redux/slice/channelSlice";
 
 const useChannel = () => {
@@ -84,6 +86,7 @@ const useChannel = () => {
 
       const channelsData = await response.json();
       dispatch(setJoinedChannels(channelsData));
+      dispatch(setSearchedJoinedChannels(channelsData));
     } catch (err) {
       toast.error(err.message);
     }
@@ -170,6 +173,33 @@ const useChannel = () => {
     }
   };
 
+  const leaveChannel = async (id) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/channel/${id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error);
+      }
+
+      await response.json();
+
+      dispatch(leaveJoinedChannel(id));
+      toast.success("Channel left successfully.");
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
   return {
     getChannel,
     getChannels,
@@ -177,6 +207,7 @@ const useChannel = () => {
     createChannel,
     updateChannel,
     deleteChannel,
+    leaveChannel,
   };
 };
 

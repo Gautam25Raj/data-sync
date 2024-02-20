@@ -75,44 +75,21 @@ const ConfirmModal = ({ isLoading, action, type, handleConfirm }) => {
   );
 };
 
-const ChatHeaderMenu = () => {
+const ChatMenu = () => {
   const dispatch = useDispatch();
 
-  const { deleteChat } = useContact();
-  const { deleteChannel } = useChannel();
-  const { deleteChatMessages, deleteChannelMessages } = useMessage();
+  const { leaveChannel } = useChannel();
 
   const [modalType, setModalType] = useState("");
   const [modalAction, setModalAction] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const isGroup = useSelector((state) => state.contact.isGroup);
-
-  const messages = useSelector((state) => state.message.messages);
-
-  const currentContact = useSelector((state) => state.contact.currentContact);
   const currentChannel = useSelector((state) => state.channel.currentChannel);
 
-  const chat = isGroup ? "Channel" : "Contact";
-
-  const handleClearMessage = () => {
-    if (messages.length === 0) toast.error("No messages to delete");
-
-    setModalAction("Delete all");
-    setModalType("Message");
-    dispatch(toggleConfirmModal());
-  };
-
-  const handleDeleteContact = () => {
-    setModalType("Contact");
-    setModalAction("Delete");
-    dispatch(toggleConfirmModal());
-  };
-
-  const handleDeleteChannel = () => {
+  const handleLeaveChannel = () => {
     setModalType("Channel");
-    setModalAction("Delete");
+    setModalAction("Leave");
     dispatch(toggleConfirmModal());
   };
 
@@ -120,24 +97,9 @@ const ChatHeaderMenu = () => {
     try {
       setIsLoading(true);
 
-      if (modalAction === "Delete all" && modalType === "Message") {
-        if (isGroup) {
-          await deleteChannelMessages(currentChannel._id);
-        } else {
-          await deleteChatMessages(currentContact.chatId);
-        }
+      await leaveChannel(currentChannel._id);
 
-        dispatch(clearMessages());
-      } else if (modalAction === "Delete" && modalType === "Contact") {
-        await deleteChat(currentContact.chatId);
-        dispatch(removeSelectedContact());
-        dispatch(deleteContact(currentContact.chatId));
-      } else if (modalAction === "Delete" && modalType === "Channel") {
-        await deleteChannel(currentChannel._id);
-        dispatch(removeCurrentChannel());
-        dispatch(deleteCurrentChannel(currentChannel._id));
-      }
-
+      dispatch(removeCurrentChannel());
       setIsLoading(false);
       dispatch(toggleConfirmModal());
     } catch (err) {
@@ -159,15 +121,7 @@ const ChatHeaderMenu = () => {
         </MenuHandler>
 
         <MenuList className="p-1">
-          <MenuItem>Add to Channel</MenuItem>
-          <MenuItem onClick={handleClearMessage}>Clear Messages</MenuItem>
-          <MenuItem
-            onClick={
-              chat === "Channel" ? handleDeleteChannel : handleDeleteContact
-            }
-          >
-            Delete {chat}
-          </MenuItem>
+          <MenuItem onClick={handleLeaveChannel}>Leave Channel</MenuItem>
         </MenuList>
       </Menu>
 
@@ -181,4 +135,4 @@ const ChatHeaderMenu = () => {
   );
 };
 
-export default ChatHeaderMenu;
+export default ChatMenu;

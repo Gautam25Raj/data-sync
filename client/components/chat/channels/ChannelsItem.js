@@ -5,12 +5,13 @@ import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useDispatch } from "react-redux";
 import Avatar, { genConfig } from "react-nice-avatar";
 
-import { setCurrentChannel } from "@/redux/slice/channelSlice";
+import { setCurrentChannel, setIsadmin } from "@/redux/slice/channelSlice";
 
-const ChannelsItem = ({ channel }) => {
+const ChannelsItem = ({ channel, admin }) => {
   const dispatch = useDispatch();
 
   const handleChannelClick = () => {
+    dispatch(setIsadmin(admin));
     dispatch(setCurrentChannel(channel));
   };
 

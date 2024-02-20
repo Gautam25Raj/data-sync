@@ -4,6 +4,7 @@ const router = express.Router();
 const {
   getChannel,
   getChannels,
+  leaveChannel,
   createChannel,
   updateChannel,
   deleteChannel,
@@ -16,6 +17,7 @@ router.get("/joined", authenticate, getJoinedChannels);
 router.get("/:id", authenticate, getChannel);
 
 router.post("/", authenticate, createChannel);
+router.post("/:id", authenticate, leaveChannel);
 
 router.put("/:id", authenticate, updateChannel);
 

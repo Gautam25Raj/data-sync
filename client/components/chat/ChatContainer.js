@@ -14,6 +14,7 @@ import Contacts from "./contacts/Contacts";
 import Channels from "./channels/Channels";
 import AddContactsBtn from "./contacts/AddContactsBtn";
 import ContactsSearch from "./contacts/ContactsSearch";
+import ChannelsSearch from "./channels/ChannelsSearch";
 
 import ContactsBtn from "../ui/buttons/ContactsBtn";
 import ChannelGroupBtn from "../ui/buttons/ChannelGroupBtn";
@@ -77,7 +78,7 @@ const ChatContainer = () => {
             {!isGroup && <AddContactsBtn />}
           </div>
 
-          {!isGroup ? <ContactsSearch /> : <ContactsSearch />}
+          {!isGroup ? <ContactsSearch /> : <ChannelsSearch />}
 
           {isGroup ? <ContactsBtn /> : <ChannelGroupBtn />}
 

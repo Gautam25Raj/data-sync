@@ -20,9 +20,18 @@ const contactSlice = createSlice({
     },
 
     deleteContact(state, action) {
+      console.log(state.contacts);
       state.contacts = state.contacts.filter(
         (contact) => contact._id !== action.payload
       );
+    },
+
+    updateLatestMessage(state, action) {
+      state.contacts.map((contact) => {
+        if (contact._id === action.payload.chatId) {
+          contact.latestMessage = { content: action.payload.message.content };
+        }
+      });
     },
 
     setOriginalContacts(state, action) {
@@ -51,6 +60,7 @@ export const {
   addContact,
   setContacts,
   deleteContact,
+  updateLatestMessage,
   addOriginalContact,
   setOriginalContacts,
   setSelectedContact,

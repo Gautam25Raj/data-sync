@@ -6,11 +6,15 @@ import { Button } from "@material-tailwind/react";
 import Avatar, { genConfig } from "react-nice-avatar";
 import { useDispatch, useSelector } from "react-redux";
 
-import { removeCurrentChannel } from "@/redux/slice/channelSlice";
-import { removeSelectedContact } from "@/redux/slice/contactSlice";
+import { removeCurrentChannel, setIsadmin } from "@/redux/slice/channelSlice";
+import {
+  removeSelectedContact,
+  updateLatestMessage,
+} from "@/redux/slice/contactSlice";
 
-import ChatHeaderMenu from "./ChatHeaderMenu";
+import ChatAdminMenu from "./ChatAdminMenu";
 import { clearMessages } from "@/redux/slice/messageSlice";
+import ChatMenu from "./ChatMenu";
 
 const HeaderLoader = () => {
   return (
@@ -33,10 +37,22 @@ const ChatHeader = () => {
   const dispatch = useDispatch();
 
   const isGroup = useSelector((state) => state.contact.isGroup);
+
+  const isAdmin = useSelector((state) => state.channel.isAdmin);
+
+  const messages = useSelector((state) => state.message.messages);
+
   const currentContact = useSelector((state) => state.contact.currentContact);
   const currentChannel = useSelector((state) => state.channel.currentChannel);
 
   const handleBackClick = () => {
+    dispatch(
+      updateLatestMessage({
+        message: messages[messages.length - 1],
+        chatId: isGroup ? currentChannel?._id : currentContact?.chatId,
+      })
+    );
+    dispatch(setIsadmin(true));
     dispatch(removeSelectedContact());
     dispatch(removeCurrentChannel());
     dispatch(clearMessages());
@@ -76,7 +92,7 @@ const ChatHeader = () => {
         </div>
       </div>
 
-      <ChatHeaderMenu />
+      {isAdmin ? <ChatAdminMenu /> : <ChatMenu />}
     </div>
   );
 };

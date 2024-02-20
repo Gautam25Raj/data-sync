@@ -55,24 +55,6 @@ const getChannels = async (req, res) => {
   }
 };
 
-const getJoinedChannels = async (req, res) => {
-  const currentUser = req.userData;
-
-  try {
-    const channels = await Channel.find({
-      users: currentUser.id,
-      admin: { $ne: currentUser.id },
-    }).select("-admin");
-
-    res.status(200).json(channels);
-  } catch (error) {
-    res.status(500).json({
-      message: "Error fetching channels for this user.",
-      error: error.message,
-    });
-  }
-};
-
 const createChannel = async (req, res) => {
   const { name, users = [] } = req.body;
   const currentUser = req.userData;
@@ -235,6 +217,64 @@ const deleteChannel = async (req, res) => {
   }
 };
 
+const getJoinedChannels = async (req, res) => {
+  const currentUser = req.userData;
+
+  try {
+    const channels = await Channel.find({
+      users: currentUser.id,
+      admin: { $ne: currentUser.id },
+    }).select("-admin");
+
+    res.status(200).json(channels);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching channels for this user.",
+      error: error.message,
+    });
+  }
+};
+
+const leaveChannel = async (req, res) => {
+  const { id } = req.params;
+  const currentUser = req.userData;
+
+  try {
+    if (!id) {
+      throw new Error("Channel ID is required");
+    }
+
+    if (!currentUser || !currentUser.id) {
+      throw new Error("Invalid user data");
+    }
+
+    const channel = await Channel.findById(id);
+
+    if (!channel) {
+      throw new Error("Channel not found");
+    }
+
+    if (channel.admin.toString() === currentUser.id) {
+      throw new Error("You cannot leave a channel you created");
+    }
+
+    await Channel.findByIdAndUpdate(
+      id,
+      { $pull: { users: currentUser.id } },
+      { new: true }
+    );
+
+    res.status(200).json({
+      message: "You have left the channel successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error leaving channel",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   getChannel,
   getChannels,
@@ -242,4 +282,5 @@ module.exports = {
   updateChannel,
   deleteChannel,
   getJoinedChannels,
+  leaveChannel,
 };

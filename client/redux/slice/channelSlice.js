@@ -4,12 +4,18 @@ const channelSlice = createSlice({
   name: "channel",
 
   initialState: {
+    isAdmin: true,
     channels: [],
     joinedChannels: [],
+    searchedJoinedChannels: [],
     currentChannel: null,
   },
 
   reducers: {
+    setIsadmin: (state, action) => {
+      state.isAdmin = action.payload;
+    },
+
     setChannels: (state, action) => {
       state.channels = action.payload;
     },
@@ -44,6 +50,10 @@ const channelSlice = createSlice({
       );
     },
 
+    setSearchedJoinedChannels: (state, action) => {
+      state.searchedJoinedChannels = action.payload;
+    },
+
     setCurrentChannel: (state, action) => {
       state.currentChannel = action.payload;
     },
@@ -55,11 +65,13 @@ const channelSlice = createSlice({
 });
 
 export const {
+  setIsadmin,
   setChannels,
   addChannel,
   updateChannel,
   deleteChannel,
   setJoinedChannels,
+  setSearchedJoinedChannels,
   addJoinedChannel,
   leaveJoinedChannel,
   setCurrentChannel,

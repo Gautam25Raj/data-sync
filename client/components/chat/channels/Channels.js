@@ -8,7 +8,9 @@ import ChannelsItem from "./ChannelsItem";
 
 const Channels = ({ isLoading }) => {
   const channels = useSelector((state) => state.channel.channels);
-  const joinedChannels = useSelector((state) => state.channel.joinedChannels);
+  const searchedJoinedChannels = useSelector(
+    (state) => state.channel.searchedJoinedChannels
+  );
 
   return (
     <div className="relative flex flex-col flex-1 flex-grow space-y-2">
@@ -26,7 +28,7 @@ const Channels = ({ isLoading }) => {
         ) : (
           <div className="flex flex-col gap-1 flex-1 flex-grow">
             {channels.map((channel, index) => (
-              <ChannelsItem key={index} channel={channel} />
+              <ChannelsItem key={index} channel={channel} admin={true} />
             ))}
           </div>
         )}
@@ -39,14 +41,14 @@ const Channels = ({ isLoading }) => {
           <p className="text-primary-white/60 z-10 absolute left-1/2 animate-spin mt-2">
             <AiOutlineLoading3Quarters size={24} />
           </p>
-        ) : joinedChannels?.length === 0 ? (
+        ) : searchedJoinedChannels?.length === 0 ? (
           <p className="text-primary-white/60 p-2 text-center h-fit bg-gray-100 rounded-lg mt-2">
             You haven't joined any channel.
           </p>
         ) : (
           <ul className="flex flex-col gap-1 flex-1 flex-grow overflow-y-auto hide-scroll">
-            {joinedChannels?.map((channel, index) => (
-              <ChannelsItem key={index} channel={channel} />
+            {searchedJoinedChannels?.map((channel, index) => (
+              <ChannelsItem key={index} channel={channel} admin={false} />
             ))}
           </ul>
         )}
