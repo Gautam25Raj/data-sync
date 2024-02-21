@@ -11,6 +11,7 @@ import {
   DialogFooter,
   DialogHeader,
 } from "@material-tailwind/react";
+import { MdKeyboardArrowUp } from "react-icons/md";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 import { toast } from "sonner";
@@ -82,6 +83,8 @@ const ChatAdminMenu = () => {
   const { deleteChannel } = useChannel();
   const { deleteChatMessages, deleteChannelMessages } = useMessage();
 
+  const [openMenu, setOpenMenu] = useState(false);
+
   const [modalType, setModalType] = useState("");
   const [modalAction, setModalAction] = useState("");
 
@@ -91,6 +94,7 @@ const ChatAdminMenu = () => {
 
   const messages = useSelector((state) => state.message.messages);
 
+  const channels = useSelector((state) => state.channel.channels);
   const currentContact = useSelector((state) => state.contact.currentContact);
   const currentChannel = useSelector((state) => state.channel.currentChannel);
 
@@ -117,6 +121,13 @@ const ChatAdminMenu = () => {
     setModalType("Channel");
     setModalAction("Delete");
     dispatch(toggleConfirmModal());
+  };
+
+  const handleChannelClick = async (channelId, contactId) => {
+    try {
+    } catch (err) {
+      toast.error("Cannot add to channel!");
+    }
   };
 
   const handleConfirm = async () => {
@@ -162,8 +173,42 @@ const ChatAdminMenu = () => {
         </MenuHandler>
 
         <MenuList className="p-1">
-          <MenuItem>Add to Channel</MenuItem>
+          <Menu
+            placement="left-start"
+            open={openMenu}
+            handler={setOpenMenu}
+            allowHover
+            offset={15}
+            className="bg-gray-50"
+          >
+            <MenuHandler className="flex items-center justify-between">
+              <MenuItem>
+                Add to channel
+                <MdKeyboardArrowUp
+                  size={16}
+                  className={`transition-transform ${
+                    openMenu ? "-rotate-90" : ""
+                  }`}
+                />
+              </MenuItem>
+            </MenuHandler>
+
+            <MenuList>
+              {channels.map((channel) => (
+                <MenuItem
+                  key={channel._id}
+                  onClick={() => {
+                    handleChannelClick(channel._id, currentContact._id);
+                  }}
+                >
+                  {channel.name}
+                </MenuItem>
+              ))}
+            </MenuList>
+          </Menu>
+
           <MenuItem onClick={handleClearMessage}>Clear Messages</MenuItem>
+
           <MenuItem
             onClick={
               chat === "Channel" ? handleDeleteChannel : handleDeleteContact

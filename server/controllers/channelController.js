@@ -116,7 +116,7 @@ const createChannel = async (req, res) => {
 const updateChannel = async (req, res) => {
   const { id } = req.params;
   const currentUser = req.userData;
-  const { name, users = [] } = req.body;
+  const { name, users } = req.body;
 
   try {
     if (!id) {
@@ -125,10 +125,6 @@ const updateChannel = async (req, res) => {
 
     if (!currentUser || !currentUser.id) {
       throw new Error("Invalid user data");
-    }
-
-    if (!name) {
-      throw new Error("Name is required");
     }
 
     let channel = await Channel.findById(id);
@@ -141,34 +137,47 @@ const updateChannel = async (req, res) => {
       throw new Error("You are not authorized to update this channel");
     }
 
-    const userIds = [];
-    for (let user of users) {
-      let foundUser;
-      if (user.includes("@")) {
-        foundUser = await User.findOne({ email: user });
-        if (!foundUser) {
-          throw new Error(`User with email ${user} not found`);
-        }
-      } else {
-        foundUser = await User.findOne({ username: user });
-        if (!foundUser) {
-          throw new Error(`User with username ${user} not found`);
-        }
-      }
-      userIds.push(foundUser._id);
+    let updateData = {};
+
+    if (name) {
+      updateData.name = name;
     }
 
-    if (!userIds.includes(currentUser.id)) {
-      userIds.push(currentUser.id);
+    if (users && users.length) {
+      let userIds = [...channel.userIds];
+
+      for (let user of users) {
+        let foundUser;
+
+        if (user.includes("@")) {
+          foundUser = await User.findOne({ email: user });
+
+          if (!foundUser) {
+            throw new Error(`User with email ${user} not found`);
+          }
+        } else {
+          foundUser = await User.findOne({ username: user });
+
+          if (!foundUser) {
+            throw new Error(`User with username ${user} not found`);
+          }
+        }
+
+        if (!userIds.includes(foundUser._id)) {
+          userIds.push(foundUser._id);
+        }
+      }
+
+      updateData.userIds = userIds;
     }
 
-    channel = await Channel.findByIdAndUpdate(
-      id,
-      { name, userIds },
-      {
-        new: true,
-      }
-    );
+    if (!Object.keys(updateData).length) {
+      throw new Error("No fields to update");
+    }
+
+    channel = await Channel.findByIdAndUpdate(id, updateData, {
+      new: true,
+    });
     channel.admin = undefined;
 
     res.status(200).json(channel);

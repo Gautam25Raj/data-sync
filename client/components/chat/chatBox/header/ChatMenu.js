@@ -18,20 +18,10 @@ import { useState } from "react";
 import { TbDots } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
 
-import useMessage from "@/hooks/useMessage";
-import useContact from "@/hooks/useContact";
 import useChannel from "@/hooks/useChannel";
 
-import { clearMessages } from "@/redux/slice/messageSlice";
 import { toggleConfirmModal } from "@/redux/slice/modalSlice";
-import {
-  deleteContact,
-  removeSelectedContact,
-} from "@/redux/slice/contactSlice";
-import {
-  deleteChannel as deleteCurrentChannel,
-  removeCurrentChannel,
-} from "@/redux/slice/channelSlice";
+import { removeCurrentChannel } from "@/redux/slice/channelSlice";
 
 const ConfirmModal = ({ isLoading, action, type, handleConfirm }) => {
   const dispatch = useDispatch();
