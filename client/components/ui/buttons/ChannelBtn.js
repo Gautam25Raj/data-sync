@@ -3,13 +3,15 @@
 import { CloudIcon } from "@heroicons/react/24/outline";
 
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 import useChannel from "@/hooks/useChannel";
 
+import { setCurrentChannel, setIsadmin } from "@/redux/slice/channelSlice";
+import { removeSelectedContact, setGroup } from "@/redux/slice/contactSlice";
+
 import SideNavItem from "@/components/sidebar/SideNavItem";
-import { useDispatch, useSelector } from "react-redux";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { setCurrentChannel } from "@/redux/slice/channelSlice";
 
 const ChannelBtn = ({ activeItem, handleItemClick }) => {
   const dispatch = useDispatch();
@@ -28,6 +30,9 @@ const ChannelBtn = ({ activeItem, handleItemClick }) => {
 
   const handleChannelClick = (channel) => {
     handleItemClick(channel._id);
+    dispatch(setGroup(true));
+    dispatch(setIsadmin(true));
+    dispatch(removeSelectedContact());
     dispatch(setCurrentChannel(channel));
   };
 

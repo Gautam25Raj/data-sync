@@ -53,6 +53,10 @@ const contactSlice = createSlice({
     toggleGroup(state) {
       state.isGroup = !state.isGroup;
     },
+
+    setGroup(state, action) {
+      state.isGroup = action.payload;
+    },
   },
 });
 
@@ -66,6 +70,7 @@ export const {
   setSelectedContact,
   removeSelectedContact,
   toggleGroup,
+  setGroup,
 } = contactSlice.actions;
 
 export default contactSlice.reducer;
