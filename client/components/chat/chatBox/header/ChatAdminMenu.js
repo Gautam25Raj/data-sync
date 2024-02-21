@@ -23,8 +23,6 @@ import useMessage from "@/hooks/useMessage";
 import useContact from "@/hooks/useContact";
 import useChannel from "@/hooks/useChannel";
 
-import { clearMessages } from "@/redux/slice/messageSlice";
-import { toggleConfirmModal } from "@/redux/slice/modalSlice";
 import {
   deleteContact,
   removeSelectedContact,
@@ -33,6 +31,10 @@ import {
   deleteChannel as deleteCurrentChannel,
   removeCurrentChannel,
 } from "@/redux/slice/channelSlice";
+import { clearMessages } from "@/redux/slice/messageSlice";
+import { toggleConfirmModal } from "@/redux/slice/modalSlice";
+
+import ChatAdminChannelMenu from "./ChatAdminChannelMenu";
 
 const ConfirmModal = ({ isLoading, action, type, handleConfirm }) => {
   const dispatch = useDispatch();
@@ -83,8 +85,6 @@ const ChatAdminMenu = () => {
   const { deleteChannel } = useChannel();
   const { deleteChatMessages, deleteChannelMessages } = useMessage();
 
-  const [openMenu, setOpenMenu] = useState(false);
-
   const [modalType, setModalType] = useState("");
   const [modalAction, setModalAction] = useState("");
 
@@ -94,7 +94,6 @@ const ChatAdminMenu = () => {
 
   const messages = useSelector((state) => state.message.messages);
 
-  const channels = useSelector((state) => state.channel.channels);
   const currentContact = useSelector((state) => state.contact.currentContact);
   const currentChannel = useSelector((state) => state.channel.currentChannel);
 
@@ -121,13 +120,6 @@ const ChatAdminMenu = () => {
     setModalType("Channel");
     setModalAction("Delete");
     dispatch(toggleConfirmModal());
-  };
-
-  const handleChannelClick = async (channelId, contactId) => {
-    try {
-    } catch (err) {
-      toast.error("Cannot add to channel!");
-    }
   };
 
   const handleConfirm = async () => {
@@ -173,39 +165,7 @@ const ChatAdminMenu = () => {
         </MenuHandler>
 
         <MenuList className="p-1">
-          <Menu
-            placement="left-start"
-            open={openMenu}
-            handler={setOpenMenu}
-            allowHover
-            offset={15}
-            className="bg-gray-50"
-          >
-            <MenuHandler className="flex items-center justify-between">
-              <MenuItem>
-                Add to channel
-                <MdKeyboardArrowUp
-                  size={16}
-                  className={`transition-transform ${
-                    openMenu ? "-rotate-90" : ""
-                  }`}
-                />
-              </MenuItem>
-            </MenuHandler>
-
-            <MenuList>
-              {channels.map((channel) => (
-                <MenuItem
-                  key={channel._id}
-                  onClick={() => {
-                    handleChannelClick(channel._id, currentContact._id);
-                  }}
-                >
-                  {channel.name}
-                </MenuItem>
-              ))}
-            </MenuList>
-          </Menu>
+          {!isGroup && <ChatAdminChannelMenu />}
 
           <MenuItem onClick={handleClearMessage}>Clear Messages</MenuItem>
 

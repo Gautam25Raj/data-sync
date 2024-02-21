@@ -142,7 +142,36 @@ const useChannel = () => {
       }
 
       const updatedChannel = await response.json();
+
       dispatch(updateChannelRedux(updatedChannel));
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
+  const addContactToChannel = async (channelId, contactId) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/channel/${channelId}/add`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({ contactId }),
+        }
+      );
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error);
+      }
+
+      const data = await response.json();
+
+      dispatch(updateChannelRedux(data));
+      toast.success("Contact added to channel successfully.");
     } catch (err) {
       toast.error(err.message);
     }
@@ -206,6 +235,7 @@ const useChannel = () => {
     getJoinedChannels,
     createChannel,
     updateChannel,
+    addContactToChannel,
     deleteChannel,
     leaveChannel,
   };

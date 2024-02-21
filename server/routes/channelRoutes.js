@@ -9,6 +9,7 @@ const {
   updateChannel,
   deleteChannel,
   getJoinedChannels,
+  addContactToChannel,
 } = require("../controllers/channelController");
 const authenticate = require("../middleware/auth");
 
@@ -20,6 +21,7 @@ router.post("/", authenticate, createChannel);
 router.post("/:id", authenticate, leaveChannel);
 
 router.put("/:id", authenticate, updateChannel);
+router.put("/:id/add", authenticate, addContactToChannel);
 
 router.delete("/:id", authenticate, deleteChannel);
 

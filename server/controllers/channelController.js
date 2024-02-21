@@ -144,7 +144,7 @@ const updateChannel = async (req, res) => {
     }
 
     if (users && users.length) {
-      let userIds = [...channel.userIds];
+      let userIds = [...channel.users];
 
       for (let user of users) {
         let foundUser;
@@ -168,7 +168,7 @@ const updateChannel = async (req, res) => {
         }
       }
 
-      updateData.userIds = userIds;
+      updateData.users = userIds;
     }
 
     if (!Object.keys(updateData).length) {
@@ -184,6 +184,47 @@ const updateChannel = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: "Error updating channel",
+      error: error.message,
+    });
+  }
+};
+
+const addContactToChannel = async (req, res) => {
+  const { id } = req.params;
+  const { contactId } = req.body;
+
+  try {
+    if (!id) {
+      throw new Error("Channel ID is required");
+    }
+
+    if (!contactId) {
+      throw new Error("Contact ID is required");
+    }
+
+    const channel = await Channel.findById(id);
+
+    if (!channel) {
+      throw new Error("Channel not found");
+    }
+
+    const contact = await User.findById(contactId);
+
+    if (!contact) {
+      throw new Error("Contact not found");
+    }
+
+    if (channel.users.includes(contactId)) {
+      throw new Error("Contact already in channel");
+    }
+
+    channel.users.push(contactId);
+    const updatedChannel = await channel.save();
+
+    res.status(200).json(updatedChannel);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error adding contact to channel",
       error: error.message,
     });
   }
@@ -292,4 +333,5 @@ module.exports = {
   deleteChannel,
   getJoinedChannels,
   leaveChannel,
+  addContactToChannel,
 };
