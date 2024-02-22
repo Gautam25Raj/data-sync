@@ -4,7 +4,7 @@ import SideNavList from "./SideNavList";
 
 const SideNav = () => {
   return (
-    <List>
+    <List className="overflow-y-auto hide-scroll">
       <SideNavList />
     </List>
   );

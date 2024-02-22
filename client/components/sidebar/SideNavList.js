@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 import SideNavItem from "./SideNavItem";
 import ChannelBtn from "../ui/buttons/ChannelBtn";
 import CreateChannelBtn from "../ui/buttons/CreateChannelBtn";
+import ChannelJoinedBtn from "../ui/buttons/ChannelJoinedBtn";
 
 const SideNavList = () => {
   const pathname = usePathname();
@@ -41,6 +42,10 @@ const SideNavList = () => {
       <hr className="my-2 border-gray-500" />
 
       <ChannelBtn activeItem={activeItem} handleItemClick={handleItemClick} />
+      <ChannelJoinedBtn
+        activeItem={activeItem}
+        handleItemClick={handleItemClick}
+      />
     </>
   );
 };
