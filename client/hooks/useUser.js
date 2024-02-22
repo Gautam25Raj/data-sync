@@ -12,10 +12,10 @@ const useUser = () => {
 
   const currentUser = useSelector((state) => state.user.user);
 
-  const getUser = async () => {
+  const getUser = async (userId) => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/${userId}`,
         {
           method: "GET",
           headers: {

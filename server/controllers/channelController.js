@@ -21,10 +21,6 @@ const getChannel = async (req, res) => {
       throw new Error("Channel not found");
     }
 
-    if (channel.admin.toString() !== currentUser.id) {
-      throw new Error("You are not authorized to view this channel");
-    }
-
     res.status(200).json(channel);
   } catch (error) {
     res.status(500).json({
