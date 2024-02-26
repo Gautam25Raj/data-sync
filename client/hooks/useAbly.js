@@ -1,12 +1,9 @@
 "use client";
 
 import Ably from "ably";
-import Spaces from "@ably/spaces";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  updateAblyInstance,
-  updateCurrentSpace,
-} from "@/redux/slice/ablySlice";
+
+import { updateAblyInstance } from "@/redux/slice/ablySlice";
 
 export default function useAbly() {
   const dispatch = useDispatch();

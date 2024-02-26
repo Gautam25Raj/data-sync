@@ -1,6 +1,5 @@
 import { PiCursorFill } from "react-icons/pi";
 
-import useAbly from "@/hooks/useAbly";
 import Ably from "ably";
 import Spaces from "@ably/spaces";
 import { useDispatch } from "react-redux";
@@ -45,11 +44,12 @@ const LiveCursor = ({ currentUser, color, channelId }) => {
             return member.connectionId === cursorUpdate.connectionId;
           });
 
-          console.log("Member:", member);
-
           setCursors((prevCursors) => ({
             ...prevCursors,
-            cursorUpdate,
+            [cursorUpdate.connectionId]: {
+              clientId: member.clientId,
+              position: cursorUpdate.position,
+            },
           }));
         }
       );
@@ -69,7 +69,7 @@ const LiveCursor = ({ currentUser, color, channelId }) => {
   }, [channelId]);
 
   return (
-    <div className="z-20">
+    <div className="z-30">
       {Object.entries(cursors).map((cursor) => {
         return (
           <div
