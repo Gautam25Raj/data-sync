@@ -18,6 +18,11 @@ const channelSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+
+    tableau: {
+      type: String,
+      required: true,
+    },
   },
 
   {

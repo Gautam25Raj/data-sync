@@ -52,7 +52,7 @@ const getChannels = async (req, res) => {
 };
 
 const createChannel = async (req, res) => {
-  const { name, users = [] } = req.body;
+  const { name, users = [], tableau } = req.body;
   const currentUser = req.userData;
 
   try {
@@ -71,15 +71,18 @@ const createChannel = async (req, res) => {
     }
 
     const userIds = [];
+
     for (let user of users) {
       let foundUser;
       if (user.includes("@")) {
         foundUser = await User.findOne({ email: user });
+
         if (!foundUser) {
           throw new Error(`User with email ${user} not found`);
         }
       } else {
         foundUser = await User.findOne({ username: user });
+
         if (!foundUser) {
           throw new Error(`User with username ${user} not found`);
         }
@@ -94,6 +97,7 @@ const createChannel = async (req, res) => {
     const newChannel = new Channel({
       name,
       users: userIds,
+      tableau,
       admin: currentUser.id,
     });
 

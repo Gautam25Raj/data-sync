@@ -65,7 +65,7 @@ const ChatContainer = () => {
   return (
     <div className="sticky h-screen top-0 py-2 ml-2 w-full min-w-fit max-w-72">
       {currentContact || currentChannel ? (
-        <Card className="h-full space-y-3 overflow-y-auto rounded-xl hide-scrollbar bg-white">
+        <Card className="h-full space-y-3 overflow-y-auto rounded-xl hide-scrollbar bg-white w-80">
           <ChatBox />
         </Card>
       ) : (

@@ -26,8 +26,6 @@ const channelSlice = createSlice({
 
     updateChannel: (state, action) => {
       state.channels = state.channels.map((channel) => {
-        console.log(action.payload);
-        console.log(channel);
         return channel._id === action.payload._id ? action.payload : channel;
       });
     },

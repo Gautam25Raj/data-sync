@@ -11,7 +11,7 @@ const Channels = ({ isLoading }) => {
   const joinedChannels = useSelector((state) => state.channel.joinedChannels);
 
   return (
-    <div className="relative flex flex-col flex-1 flex-grow space-y-2">
+    <div className="relative flex flex-col flex-1 flex-grow space-y-2 w-80">
       <div className="space-y-1">
         <p className="text-sm text-gray-500">Your Channel Groups</p>
 

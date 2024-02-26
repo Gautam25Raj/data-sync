@@ -28,6 +28,7 @@ const NewChannelModal = () => {
 
   const [channelName, setChannelName] = useState("");
   const [channelUsers, setChannelUsers] = useState([]);
+  const [channelTableau, setChannelTableau] = useState([]);
 
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -51,8 +52,11 @@ const NewChannelModal = () => {
 
       const usersArray = channelUsers.split(",").map((user) => user.trim());
 
-      const response = await createChannel(channelName, usersArray);
-      console.log(response);
+      const response = await createChannel(
+        channelName,
+        usersArray,
+        channelTableau
+      );
 
       if (response) {
         handleOpen();
@@ -102,6 +106,18 @@ const NewChannelModal = () => {
             placeholder={"Channel Name"}
             input={channelName}
             setInput={setChannelName}
+            required
+          />
+
+          <FormInput
+            label="Tableau Public Url"
+            id={"tableau-url"}
+            type={"text"}
+            placeholder={
+              "https://public.tableau.com/views/ExploringHistoricallyBlackCollegesandUniversities/ExploringHBCU"
+            }
+            input={channelTableau}
+            setInput={setChannelTableau}
             required
           />
 

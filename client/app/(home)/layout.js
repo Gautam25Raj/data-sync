@@ -5,13 +5,14 @@ import AuthProvider from "@/providers/AuthProvider";
 import CreateContact from "@/components/modals/CreateContact";
 import NewChannelModal from "@/components/modals/NewChannelModal";
 
-const HomeLayout = () => {
+const HomeLayout = ({ children }) => {
   return (
     <AuthProvider>
       <div className="bg-gray-100 flex">
         <NewChannelModal />
         <CreateContact />
         <Sidebar />
+        {children}
         <ChatContainer />
       </div>
     </AuthProvider>

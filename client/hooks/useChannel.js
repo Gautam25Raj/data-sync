@@ -92,7 +92,7 @@ const useChannel = () => {
     }
   };
 
-  const createChannel = async (name, users) => {
+  const createChannel = async (name, users, tableau) => {
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/channel`,
@@ -102,7 +102,7 @@ const useChannel = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-          body: JSON.stringify({ name, users }),
+          body: JSON.stringify({ name, users, tableau }),
         }
       );
 

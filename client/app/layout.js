@@ -3,6 +3,7 @@ import "./globals.css";
 
 import ReduxProvider from "@/providers/ReduxProvider";
 import { Toaster } from "sonner";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,6 +21,11 @@ export default function RootLayout({ children }) {
 
           {children}
         </ReduxProvider>
+
+        <Script
+          type="module"
+          src="https://public.tableau.com/javascripts/api/tableau.embedding.3.latest.min.js"
+        />
       </body>
     </html>
   );
