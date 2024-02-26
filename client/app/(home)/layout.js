@@ -8,7 +8,7 @@ import NewChannelModal from "@/components/modals/NewChannelModal";
 const HomeLayout = ({ children }) => {
   return (
     <AuthProvider>
-      <div className="bg-gray-100 flex">
+      <div className="bg-gray-100 flex hide-scroll">
         <NewChannelModal />
         <CreateContact />
         <Sidebar />

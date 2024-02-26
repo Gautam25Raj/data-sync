@@ -72,65 +72,7 @@ export default function useAbly() {
     }
   };
 
-  const initializeSpaces = async (spaceName, username, setCursors) => {
-    if (!ably || ably.connection.state !== "connected") {
-      console.error(
-        "Ably is not connected. Please initialize Ably before initializing Spaces."
-      );
-      return;
-    }
-
-    const dispatch = useDispatch();
-
-    try {
-      const spacesInstance = new Spaces(ably);
-      console.log("Spaces instance:", spacesInstance);
-      const space = await spacesInstance.get(spaceName);
-
-      await space.enter({ name: username });
-
-      dispatch(updateSpaces(spacesInstance));
-      dispatch(updateCurrentSpace(space));
-
-      console.log("Space:", space);
-      const cursorSubscription = space.cursors.subscribe(
-        "update",
-        async (cursorUpdate) => {
-          const members = await space.members.getAll();
-          const member = members.find(
-            (member) => member.connectionId === cursorUpdate.connectionId
-          );
-
-          setCursors((prevCursors) => ({
-            ...prevCursors,
-            [member.connectionId]: cursorUpdate.position,
-          }));
-        }
-      );
-      console.log("Cursor subscription:", cursorSubscription);
-
-      const mouseMoveHandler = ({ clientX, clientY }) => {
-        space.cursors.set({
-          position: { x: clientX, y: clientY },
-          data: {
-            color: "red",
-          },
-        });
-      };
-
-      window.addEventListener("mousemove", mouseMoveHandler);
-
-      return () => {
-        window.removeEventListener("mousemove", mouseMoveHandler);
-        cursorSubscription.unsubscribe();
-      };
-    } catch (error) {
-      console.error("Error initializing spaces:", error);
-    }
-  };
-
   return {
     initializeAbly,
-    initializeSpaces,
   };
 }
