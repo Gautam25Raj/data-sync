@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import useChannel from "@/hooks/useChannel";
 
 import LiveCursor from "@/components/LiveCursor";
+import Whiteboard from "@/components/board/WhiteBoard";
 
 const ChannelPage = ({ params: { channelId } }) => {
   const { getChannel } = useChannel();
@@ -71,7 +72,7 @@ const ChannelPage = ({ params: { channelId } }) => {
 
   return (
     <>
-      <div className="flex flex-col h-screen py-2 ml-2 flex-1 w-full relative">
+      <div className="flex flex-col h-screen py-2 ml-2 flex-1 w-full relative prevent-select">
         <button
           size="sm"
           onClick={handleShowCursors}
@@ -103,9 +104,7 @@ const ChannelPage = ({ params: { channelId } }) => {
         </Card>
       </div>
 
-      {showCursors && (
-        <div className="absolute h-screen w-screen bg-transparent z-10"></div>
-      )}
+      {showCursors && <Whiteboard />}
     </>
   );
 };
