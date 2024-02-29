@@ -26,14 +26,6 @@ const ablyAuth = (req, res) => {
       clientId: userId,
     };
 
-    // ably.auth.requestToken(tokenParams, null, (err, tokenDetails) => {
-    //   if (err) {
-    //     console.error("Error generating Ably token:", err);
-    //     return res.status(500).json({ error: "Error generating Ably token" });
-    //   }
-    //   return res.status(200).json(tokenDetails);
-    // });
-
     ably.auth.createTokenRequest(authOptions, (err, tokenRequest) => {
       if (err) {
         res.status(500).send("Error creating TokenRequest: " + err);

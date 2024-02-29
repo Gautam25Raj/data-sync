@@ -3,11 +3,12 @@
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 import jwt from "jsonwebtoken";
+import { toast } from "sonner";
+import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, Suspense } from "react";
-import { useDispatch } from "react-redux";
+
 import { setUser } from "@/redux/slice/userSlice";
-import { toast } from "sonner";
 
 const AuthProvider = ({ children }) => {
   const router = useRouter();
@@ -54,8 +55,7 @@ const AuthProvider = ({ children }) => {
           router.push("/");
         }
       } catch (err) {
-        console.error(err);
-        setError("An error occurred while checking the token.");
+        toast.error("An error occurred while checking token.");
       } finally {
         setIsCheckingToken(false);
       }

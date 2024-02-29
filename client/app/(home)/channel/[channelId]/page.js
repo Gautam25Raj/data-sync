@@ -18,45 +18,6 @@ const ChannelPage = ({ params: { channelId } }) => {
 
   const currentUser = useSelector((state) => state.user.user);
 
-  const colors = [
-    {
-      bg: "#fecaca",
-      name: "red",
-    },
-    {
-      bg: "#fdba74",
-      name: "orange",
-    },
-    {
-      bg: "#fcd34d",
-      name: "#d97706",
-    },
-    {
-      bg: "#fef08a",
-      name: "yellow",
-    },
-    {
-      bg: "#d9f99d",
-      name: "green",
-    },
-    {
-      bg: "#a7f3d0",
-      name: "#047857",
-    },
-    {
-      bg: "#a5f3fc",
-      name: "cyan",
-    },
-    {
-      bg: "#38bdf8",
-      name: "blue",
-    },
-    {
-      bg: "#a78bfa",
-      name: "purple",
-    },
-  ];
-
   useEffect(() => {
     const fetch = async () => {
       const res = await getChannel(channelId);
@@ -83,11 +44,7 @@ const ChannelPage = ({ params: { channelId } }) => {
 
         <Card className="rounded-xl bg-white flex-1 flex-grow">
           {showCursors && (
-            <LiveCursor
-              channelId={channelId}
-              currentUser={currentUser}
-              color={colors[Math.floor(Math.random() * 9)]}
-            />
+            <LiveCursor channelId={channelId} currentUser={currentUser} />
           )}
 
           {channel ? (
