@@ -37,6 +37,7 @@ const MemberCursors = () => {
       {Object.values(cursors).map((data) => {
         const cursorUpdate = data.cursorUpdate;
         const member = data.member;
+        console.log("member", data);
 
         if (cursorUpdate?.data?.state === "leave") return null;
         const { userColors } = member.profileData;
