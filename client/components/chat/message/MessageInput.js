@@ -5,12 +5,17 @@ import { Button } from "@material-tailwind/react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 import { toast } from "sonner";
-import { useSelector } from "react-redux";
+import { useChannel } from "ably/react";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 
 import useMessage from "@/hooks/useMessage";
 
+import { addMessage } from "@/redux/slice/messageSlice";
+
 const MessageInput = () => {
+  const dispatch = useDispatch();
+
   const { createChatMessage, createChannelMessage } = useMessage();
 
   const textareaRef = useRef(null);
@@ -18,9 +23,26 @@ const MessageInput = () => {
   const [message, setMessage] = useState("");
   const [disabled, setDisabled] = useState(false);
 
+  const user = useSelector((state) => state.user.user);
+
   const isGroup = useSelector((state) => state.contact.isGroup);
   const currentContact = useSelector((state) => state.contact.currentContact);
   const currentChannel = useSelector((state) => state.channel.currentChannel);
+
+  const { channel } = useChannel(
+    `chatId-${isGroup ? currentChannel._id : currentContact.chatId}`,
+    (message) =>
+      dispatch(
+        addMessage({
+          sender: isGroup
+            ? { _id: message.clientId, username: message.data.sender }
+            : message.clientId,
+          content: message.data.content,
+          chatId: isGroup ? currentChannel._id : currentContact.chatId,
+          createdAt: new Date(message.timestamp).toISOString(),
+        })
+      )
+  );
 
   useEffect(() => {
     if (textareaRef.current.scrollHeight < 224) {
@@ -46,8 +68,15 @@ const MessageInput = () => {
       setDisabled(true);
 
       if (isGroup) {
+        channel.publish({
+          data: {
+            content: message,
+            sender: user.username,
+          },
+        });
         createChannelMessage(currentChannel._id, message);
       } else {
+        channel.publish({ data: { content: message } });
         createChatMessage(currentContact.chatId, message);
       }
 

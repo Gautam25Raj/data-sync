@@ -2,20 +2,13 @@
 
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 
-import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import Avatar, { genConfig } from "react-nice-avatar";
 import { useDispatch, useSelector } from "react-redux";
 
 import { setSelectedContact } from "@/redux/slice/contactSlice";
 
-// import {
-//   setSelectedContact,
-//   setSelectedPresence,
-// } from "@/redux/slice/contactsSlice";
-
 const ContactsItem = ({ chat }) => {
-  let flag = true;
   const dispatch = useDispatch();
 
   const [user, setUser] = useState(null);
@@ -30,6 +23,10 @@ const ContactsItem = ({ chat }) => {
     } else {
       setUser(chat.users[1]);
     }
+
+    // return () => {
+    //   channel.unsubscribe();
+    // };
   }, [chat]);
 
   // useEffect(() => {

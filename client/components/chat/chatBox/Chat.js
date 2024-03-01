@@ -10,8 +10,6 @@ import useMessage from "@/hooks/useMessage";
 
 import MessageWithDate from "../message/MessageWithDate";
 
-// import { addMessage, setMessages } from "@/redux/slice/contactsSlice";
-
 const Chat = () => {
   const { fetchChatMessages, fetchChannelMessages } = useMessage();
 
