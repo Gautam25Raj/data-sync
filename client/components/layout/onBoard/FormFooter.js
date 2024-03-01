@@ -1,7 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { CardFooter, Typography } from "@material-tailwind/react";
+
+import Link from "next/link";
 
 const FormFooter = ({ isSigningUp, setIsSigningUp }) => {
   return (

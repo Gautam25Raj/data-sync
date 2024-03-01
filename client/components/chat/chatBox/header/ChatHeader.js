@@ -1,20 +1,20 @@
 "use client";
 
 import { IoMdArrowBack } from "react-icons/io";
-
 import { Button } from "@material-tailwind/react";
+
 import Avatar, { genConfig } from "react-nice-avatar";
 import { useDispatch, useSelector } from "react-redux";
 
-import { removeCurrentChannel, setIsadmin } from "@/redux/slice/channelSlice";
 import {
   removeSelectedContact,
   updateLatestMessage,
 } from "@/redux/slice/contactSlice";
-
-import ChatAdminMenu from "./ChatAdminMenu";
 import { clearMessages } from "@/redux/slice/messageSlice";
+import { removeCurrentChannel, setIsadmin } from "@/redux/slice/channelSlice";
+
 import ChatMenu from "./ChatMenu";
+import ChatAdminMenu from "./ChatAdminMenu";
 
 const HeaderLoader = () => {
   return (

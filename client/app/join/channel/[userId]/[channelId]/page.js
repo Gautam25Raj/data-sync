@@ -1,9 +1,11 @@
 "use client";
 
 import { Button, Card } from "@material-tailwind/react";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 import Link from "next/link";
 import { toast } from "sonner";
+import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Avatar, { genConfig } from "react-nice-avatar";
@@ -13,8 +15,6 @@ import AuthProvider from "@/providers/AuthProvider";
 import useUser from "@/hooks/useUser";
 import useInvite from "@/hooks/useInvite";
 import useChannel from "@/hooks/useChannel";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { useSelector } from "react-redux";
 
 const page = ({ params: { userId, channelId } }) => {
   const router = useRouter();

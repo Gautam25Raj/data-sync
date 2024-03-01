@@ -4,14 +4,12 @@ import { Button } from "@material-tailwind/react";
 
 import { toast } from "sonner";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
-import FormInput from "@/components/ui/FormInput";
-import { setUser } from "@/redux/slice/userSlice";
 import useUser from "@/hooks/useUser";
+
+import FormInput from "@/components/ui/FormInput";
 
 const SignUpForm = () => {
   const { signUpUser } = useUser();

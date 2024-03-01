@@ -1,16 +1,18 @@
 "use client";
 
-import useChannel from "@/hooks/useChannel";
 import {
   Menu,
   MenuHandler,
   MenuItem,
   MenuList,
 } from "@material-tailwind/react";
-import { useState } from "react";
 import { MdKeyboardArrowUp } from "react-icons/md";
-import { useSelector } from "react-redux";
+
 import { toast } from "sonner";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+
+import useChannel from "@/hooks/useChannel";
 
 const ChatAdminChannelMenu = () => {
   const { addContactToChannel } = useChannel();

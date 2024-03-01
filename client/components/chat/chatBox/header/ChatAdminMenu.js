@@ -11,7 +11,6 @@ import {
   DialogFooter,
   DialogHeader,
 } from "@material-tailwind/react";
-import { MdKeyboardArrowUp } from "react-icons/md";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 import { toast } from "sonner";

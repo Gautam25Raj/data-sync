@@ -4,8 +4,8 @@ import { Card, CardBody } from "@material-tailwind/react";
 
 import { useState } from "react";
 
-import FormHeader from "./FormHeader";
 import LoginForm from "./LoginForm";
+import FormHeader from "./FormHeader";
 import SignUpForm from "./SignUpForm";
 import FormFooter from "./FormFooter";
 

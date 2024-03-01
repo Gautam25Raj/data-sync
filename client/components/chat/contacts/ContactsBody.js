@@ -1,8 +1,10 @@
+import { ArrowLeftIcon } from "@heroicons/react/24/solid";
+
+import Link from "next/link";
+
 import Contacts from "./Contacts";
 import AddContactsBtn from "./AddContactsBtn";
 import ContactsSearch from "./ContactsSearch";
-import { ArrowLeftIcon } from "@heroicons/react/24/solid";
-import Link from "next/link";
 
 const ContactsBody = () => {
   return (

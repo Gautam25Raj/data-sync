@@ -11,11 +11,11 @@ import {
   DialogFooter,
   DialogHeader,
 } from "@material-tailwind/react";
+import { TbDots } from "react-icons/tb";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 import { toast } from "sonner";
 import { useState } from "react";
-import { TbDots } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
 
 import useChannel from "@/hooks/useChannel";

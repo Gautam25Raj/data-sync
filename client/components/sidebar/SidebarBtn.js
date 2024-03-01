@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@material-tailwind/react";
+
 import GradientIcon from "../ui/GradientIcon";
 
 const SidebarBtn = ({ icon, label, onClick }) => {

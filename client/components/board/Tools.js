@@ -1,9 +1,10 @@
-import Image from "next/image";
 import { BsFillCursorFill } from "react-icons/bs";
+
+import Image from "next/image";
 import { HiPencil } from "react-icons/hi2";
-import { IoArrowUndoOutline, IoArrowRedoOutline } from "react-icons/io5";
-import { MdOutlineRectangle } from "react-icons/md";
 import { FaRegCircle } from "react-icons/fa";
+import { MdOutlineRectangle } from "react-icons/md";
+import { IoArrowUndoOutline, IoArrowRedoOutline } from "react-icons/io5";
 
 const Tools = ({
   tool,

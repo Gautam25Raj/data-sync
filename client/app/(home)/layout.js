@@ -2,9 +2,10 @@ import Sidebar from "@/components/sidebar/Sidebar";
 import ChatContainer from "@/components/chat/ChatContainer";
 
 import AuthProvider from "@/providers/AuthProvider";
+import AblyAuthProvider from "@/providers/AblyProvider";
+
 import CreateContact from "@/components/modals/CreateContact";
 import NewChannelModal from "@/components/modals/NewChannelModal";
-import AblyAuthProvider from "@/providers/AblyProvider";
 
 const HomeLayout = ({ children }) => {
   return (

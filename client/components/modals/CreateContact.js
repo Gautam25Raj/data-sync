@@ -2,17 +2,15 @@
 
 import {
   Card,
-  Input,
   Button,
   Dialog,
-  Textarea,
-  CardBody,
   CardFooter,
   Typography,
-  CardHeader,
-  DialogHeader,
   DialogBody,
+  DialogHeader,
 } from "@material-tailwind/react";
+import { IoClose } from "react-icons/io5";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 import { toast } from "sonner";
 import { useState } from "react";
@@ -21,10 +19,9 @@ import { useDispatch, useSelector } from "react-redux";
 import useContact from "@/hooks/useContact";
 
 import { toggleNewContactModal } from "@/redux/slice/modalSlice";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import FormTextarea from "../ui/FormTextarea";
+
 import FormInput from "../ui/FormInput";
-import { IoClose } from "react-icons/io5";
+import FormTextarea from "../ui/FormTextarea";
 
 const CreateContact = () => {
   const dispatch = useDispatch();

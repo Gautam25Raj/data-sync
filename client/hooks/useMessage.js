@@ -1,8 +1,8 @@
 "use client";
 
-import { removeMessage, setMessages } from "@/redux/slice/messageSlice";
-import { useDispatch } from "react-redux";
 import { toast } from "sonner";
+import { useDispatch } from "react-redux";
+import { removeMessage, setMessages } from "@/redux/slice/messageSlice";
 
 const useMessage = () => {
   const dispatch = useDispatch();
