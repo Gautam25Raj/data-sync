@@ -1,8 +1,8 @@
 "use client";
 
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
 
 import { addJoinedChannel } from "@/redux/slice/channelSlice";
 

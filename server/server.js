@@ -44,20 +44,28 @@ app.use("/api/invite", require("./routes/inviteRoutes"));
 io.on("connection", (socket) => {
   console.log("New client connected");
 
+  socket.on("join-room", (roomId) => {
+    console.log("Room ID: ", roomId);
+    socket.join(roomId);
+  });
+
   socket.on("draw", (data) => {
-    socket.broadcast.emit("draw", data);
+    console.log(data);
+    io.to(data.roomId).emit("draw", data);
   });
 
-  socket.on("client-ready", () => {
-    socket.broadcast.emit("get-canvas-state");
+  socket.on("client-ready", (roomId) => {
+    io.to(roomId).emit("get-canvas-state");
   });
 
-  socket.on("canvas-state", (state) => {
+  socket.on("canvas-state", (data) => {
     console.log("received canvas state");
-    socket.broadcast.emit("canvas-state-from-server", state);
+    io.to(data.roomId).emit("canvas-state-from-server", data.state);
   });
 
-  socket.on("clear", () => io.emit("clear"));
+  socket.on("clear", (roomId) => {
+    io.to(roomId).emit("clear");
+  });
 
   socket.on("disconnect", () => {
     console.log("Client disconnected");
