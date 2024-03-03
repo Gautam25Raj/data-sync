@@ -48,6 +48,17 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("draw", data);
   });
 
+  socket.on("client-ready", () => {
+    socket.broadcast.emit("get-canvas-state");
+  });
+
+  socket.on("canvas-state", (state) => {
+    console.log("received canvas state");
+    socket.broadcast.emit("canvas-state-from-server", state);
+  });
+
+  socket.on("clear", () => io.emit("clear"));
+
   socket.on("disconnect", () => {
     console.log("Client disconnected");
   });

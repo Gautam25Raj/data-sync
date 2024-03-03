@@ -514,6 +514,27 @@ const Board = () => {
   useEffect(() => {
     const ctx = canvasRef.current?.getContext("2d");
 
+    socket.emit("client-ready");
+
+    socket.on("get-canvas-state", () => {
+      if (!canvasRef.current?.toDataURL()) return;
+
+      console.log("sending canvas state");
+
+      socket.emit("canvas-state", canvasRef.current.toDataURL());
+    });
+
+    socket.on("canvas-state-from-server", (state) => {
+      console.log("Received the state");
+
+      const img = new Image();
+      img.src = state;
+
+      img.onload = () => {
+        ctx?.drawImage(img, 0, 0);
+      };
+    });
+
     socket.on("draw", ({ prevPoint, currentPoint, color }) => {
       if (!ctx) return console.log("no ctx here");
       drawLine({ prevPoint, currentPoint, ctx, color });
@@ -523,6 +544,9 @@ const Board = () => {
 
     return () => {
       socket.off("draw");
+      socket.off("get-canvas-state");
+      socket.off("canvas-state-from-server");
+      socket.off("clear");
     };
   }, [canvasRef]);
 
