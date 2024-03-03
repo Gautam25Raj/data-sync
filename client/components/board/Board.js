@@ -501,38 +501,35 @@
 
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
+import { io } from "socket.io-client";
+import { useDraw } from "@/hooks/useDraw";
+import { drawLine } from "@/utils/drawLine";
+const socket = io("http://localhost:8080");
 
-const Board = ({ canvasRef, ctxRef }) => {
-  const mouseDown = useRef(false);
+const Board = () => {
+  const [color, setColor] = useState("#000");
+  const { canvasRef, onMouseDown, clear } = useDraw(createLine);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const context = canvas.getContext("2d");
-    ctxRef.current = context;
-  }, []);
+    const ctx = canvasRef.current?.getContext("2d");
 
-  const startDrawing = ({ nativeEvent }) => {
-    setIsDrawing(true);
-    const { offsetX, offsetY } = nativeEvent;
-    ctxRef.current.beginPath();
-    ctxRef.current.moveTo(offsetX, offsetY);
-    mouseDown.current = true;
-  };
+    socket.on("draw", ({ prevPoint, currentPoint, color }) => {
+      if (!ctx) return console.log("no ctx here");
+      drawLine({ prevPoint, currentPoint, ctx, color });
+    });
 
-  const draw = ({ nativeEvent }) => {
-    setIsDrawing(true);
-    if (!mouseDown.current) return;
-    const { offsetX, offsetY } = nativeEvent;
-    ctxRef.current.lineTo(offsetX, offsetY);
-    ctxRef.current.stroke();
-  };
+    socket.on("clear", clear);
 
-  const stopDrawing = () => {
-    setIsDrawing(false);
-    ctxRef.current.closePath();
-    mouseDown.current = false;
-  };
+    return () => {
+      socket.off("draw");
+    };
+  }, [canvasRef]);
+
+  function createLine({ prevPoint, currentPoint, ctx }) {
+    socket.emit("draw", { prevPoint, currentPoint, color });
+    drawLine({ prevPoint, currentPoint, ctx, color });
+  }
 
   return (
     <div
@@ -544,17 +541,14 @@ const Board = ({ canvasRef, ctxRef }) => {
         bottom: 0,
         overflow: "hidden",
       }}
-      onMouseDown={startDrawing}
-      onMouseMove={draw}
-      onMouseUp={stopDrawing}
-      onMouseOut={stopDrawing}
     >
       <canvas
         ref={canvasRef}
-        width={1000}
-        height={500}
-        style={{ border: "1px solid black" }}
-      ></canvas>
+        onMouseDown={onMouseDown}
+        width={750}
+        height={750}
+        className="border border-black rounded-md"
+      />
     </div>
   );
 };
