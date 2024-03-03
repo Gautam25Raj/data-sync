@@ -50,9 +50,14 @@ const LiveCursor = ({ currentUser, channelId }) => {
   ];
 
   const handleMouseMove = (event) => {
-    const { clientX, clientY } = event;
+    const { clientX, clientY, buttons } = event;
     setPosition({ x: clientX - 288, y: clientY });
-    set({ position: { x: clientX - 288, y: clientY } });
+    set({
+      position: { x: clientX - 288, y: clientY },
+      data: {
+        isDrawing: buttons,
+      },
+    });
   };
 
   useEffect(() => {

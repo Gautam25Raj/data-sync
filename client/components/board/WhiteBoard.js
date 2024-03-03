@@ -5,10 +5,7 @@ import React, { useState, useRef } from "react";
 import Board from "./Board";
 import Tools from "./Tools";
 
-const Whiteboard = () => {
-  const ctx = useRef(null);
-  const canvas = useRef(null);
-
+const Whiteboard = ({ canvas, ctx }) => {
   const [tool, setTool] = useState("pencil");
   const [color, setColor] = useState("#c95a5a");
 
@@ -28,7 +25,7 @@ const Whiteboard = () => {
         />
       </div>
 
-      <div className="fixed bottom-2.5 left-1/2 -translate-x-1/2 w-auto h-12 p-2.5 bg-white rounded-md flex items-center justify-center shadow-lg toolbox">
+      <div className="fixed bottom-2.5 left-1/2 -translate-x-1/2 w-auto h-12 p-2.5 bg-white rounded-md flex items-center justify-center shadow-2xl border border-gray-300 toolbox">
         <Tools
           tool={tool}
           elements={elements}

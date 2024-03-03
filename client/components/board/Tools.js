@@ -103,7 +103,12 @@ const Tools = ({
         src="/assets/toolbar/line.svg"
         alt="Line Tool"
         onClick={() => handleToolClick("line")}
-        className={tool === "line" ? "selected" : "" + " hover:scale-125"}
+        className={
+          tool === "line"
+            ? "selected"
+            : "" +
+              " text-black cursor-pointer select-none mr-2.5 hover:scale-125"
+        }
       />
 
       <div className="h-6 w-px bg-gray-900 mr-2.5"></div>

@@ -3,7 +3,7 @@
 import { Card } from "@material-tailwind/react";
 
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import useChannel from "@/hooks/useChannel";
 
@@ -15,6 +15,9 @@ const ChannelPage = ({ params: { channelId } }) => {
 
   const [channel, setChannel] = useState(null);
   const [showCursors, setShowCursors] = useState(false);
+
+  const ctx = useRef(null);
+  const canvas = useRef(null);
 
   const currentUser = useSelector((state) => state.user.user);
 
@@ -61,7 +64,7 @@ const ChannelPage = ({ params: { channelId } }) => {
         </Card>
       </div>
 
-      {showCursors && <Whiteboard />}
+      {showCursors && <Whiteboard ctx={ctx} canvas={canvas} />}
     </>
   );
 };
