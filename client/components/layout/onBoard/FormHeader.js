@@ -1,6 +1,6 @@
-import { CreditCardIcon } from "@heroicons/react/24/solid";
-
 import { CardHeader, Typography } from "@material-tailwind/react";
+
+import Image from "next/image";
 
 const FormHeader = ({ isSigningUp }) => {
   return (
@@ -10,8 +10,13 @@ const FormHeader = ({ isSigningUp }) => {
       shadow={true}
       className="m-0 grid place-items-center px-4 py-8 text-center"
     >
-      <div className="mb-4 h-20 p-6 text-white">
-        <CreditCardIcon className="h-10 w-10 text-white" />
+      <div className="-mb-8 p-6 text-white prevent-select">
+        <Image
+          src="/assets/datasync-logo.png"
+          alt="DataSync"
+          width={100}
+          height={100}
+        />
       </div>
 
       <Typography variant="h5" color="white">

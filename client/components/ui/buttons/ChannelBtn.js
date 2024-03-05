@@ -12,13 +12,13 @@ import useChannel from "@/hooks/useChannel";
 import { setCurrentChannel, setIsadmin } from "@/redux/slice/channelSlice";
 import { removeSelectedContact, setGroup } from "@/redux/slice/contactSlice";
 
-import SideNavItem from "@/components/sidebar/SideNavItem";
 import ChannelMenuBtn from "./ChannelMenuBtn";
+import SideNavItem from "@/components/sidebar/SideNavItem";
 
 const ChannelBtn = ({ activeItem, handleItemClick }) => {
   const dispatch = useDispatch();
 
-  const { getChannels, getJoinedChannels } = useChannel();
+  const { getChannels } = useChannel();
 
   const [loading, setLoading] = useState(true);
 

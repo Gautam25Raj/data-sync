@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
 
 import useChannel from "@/hooks/useChannel";
+
 import { setCurrentChannel } from "@/redux/slice/channelSlice";
 
 const ChannelMenuBtn = ({ channelId, isAdmin }) => {

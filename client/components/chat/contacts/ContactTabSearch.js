@@ -1,12 +1,14 @@
 "use client";
 
-import useContact from "@/hooks/useContact";
-import { DocumentDuplicateIcon, PlusIcon } from "@heroicons/react/24/solid";
-import Avatar, { genConfig } from "react-nice-avatar";
-import { useSelector } from "react-redux";
-import { toast } from "sonner";
 import { IoCheckmark } from "react-icons/io5";
+import { DocumentDuplicateIcon, PlusIcon } from "@heroicons/react/24/solid";
+
+import { toast } from "sonner";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import Avatar, { genConfig } from "react-nice-avatar";
+
+import useContact from "@/hooks/useContact";
 
 export default function ContactTabSearch({ username, email, id }) {
   const { createChats } = useContact();
