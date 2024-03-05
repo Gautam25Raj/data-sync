@@ -74,7 +74,10 @@ const page = ({ params: { userId, channelId } }) => {
   return (
     <AuthProvider>
       {isLoading ? (
-        <div>Getting Channel Info</div>
+        <div className="w-screen h-screen flex items-center justify-center flex-col">
+          <AiOutlineLoading3Quarters className="mx-auto animate-spin" />
+          <div>Getting Channel Info</div>
+        </div>
       ) : (
         <div className="h-screen w-screen flex items-center justify-center bg-gray-50">
           <Card className="py-5 px-16">

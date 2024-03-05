@@ -11,6 +11,7 @@ import useChannel from "@/hooks/useChannel";
 import { setCurrentChannel, setIsadmin } from "@/redux/slice/channelSlice";
 import { removeSelectedContact, setGroup } from "@/redux/slice/contactSlice";
 
+import ChannelMenuBtn from "./ChannelMenuBtn";
 import SideNavItem from "@/components/sidebar/SideNavItem";
 
 const ChannelJoinedBtn = ({ activeItem, handleItemClick }) => {
@@ -48,14 +49,18 @@ const ChannelJoinedBtn = ({ activeItem, handleItemClick }) => {
         </p>
       ) : (
         joinedChannels.map((channel) => (
-          <SideNavItem
-            key={channel._id}
-            label={channel.name}
-            href={`/channel/${channel._id}`}
-            icon={<CloudIcon className="text-black bg-black" />}
-            active={activeItem === channel._id}
-            onClick={() => handleChannelClick(channel)}
-          />
+          <div className="relative">
+            <SideNavItem
+              key={channel._id}
+              label={channel.name}
+              href={`/channel/${channel._id}`}
+              icon={<CloudIcon className="text-black bg-black" />}
+              active={activeItem === channel._id}
+              onClick={() => handleChannelClick(channel)}
+            />
+
+            <ChannelMenuBtn channelId={channel._id} isAdmin={false} />
+          </div>
         ))
       )}
     </>

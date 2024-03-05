@@ -42,6 +42,7 @@ const SideNavList = () => {
       <hr className="my-2 border-gray-500" />
 
       <ChannelBtn activeItem={activeItem} handleItemClick={handleItemClick} />
+
       <ChannelJoinedBtn
         activeItem={activeItem}
         handleItemClick={handleItemClick}

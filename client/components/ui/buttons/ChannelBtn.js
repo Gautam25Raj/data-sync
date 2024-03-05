@@ -2,9 +2,10 @@
 
 import { CloudIcon } from "@heroicons/react/24/outline";
 
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 import useChannel from "@/hooks/useChannel";
 
@@ -12,6 +13,7 @@ import { setCurrentChannel, setIsadmin } from "@/redux/slice/channelSlice";
 import { removeSelectedContact, setGroup } from "@/redux/slice/contactSlice";
 
 import SideNavItem from "@/components/sidebar/SideNavItem";
+import ChannelMenuBtn from "./ChannelMenuBtn";
 
 const ChannelBtn = ({ activeItem, handleItemClick }) => {
   const dispatch = useDispatch();
@@ -48,14 +50,18 @@ const ChannelBtn = ({ activeItem, handleItemClick }) => {
         </p>
       ) : (
         channels.map((channel) => (
-          <SideNavItem
-            key={channel._id}
-            label={channel.name}
-            href={`/channel/${channel._id}`}
-            icon={<CloudIcon className="text-black bg-black" />}
-            active={activeItem === channel._id}
-            onClick={() => handleChannelClick(channel)}
-          />
+          <div className="relative">
+            <SideNavItem
+              key={channel._id}
+              label={channel.name}
+              href={`/channel/${channel._id}`}
+              icon={<CloudIcon className="text-black bg-black" />}
+              active={activeItem === channel._id}
+              onClick={() => handleChannelClick(channel)}
+            />
+
+            <ChannelMenuBtn channelId={channel._id} isAdmin={true} />
+          </div>
         ))
       )}
     </>
