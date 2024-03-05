@@ -38,21 +38,7 @@ const createChats = async (req, res) => {
       throw new Error("User not authenticated.");
     }
 
-    let foundUser = null;
-
-    if (userId.includes("@")) {
-      foundUser = await User.findOne({ email: userId }).select("_id");
-
-      if (!foundUser) {
-        throw new Error(`User with email ${userId} not found`);
-      }
-    } else {
-      foundUser = await User.findOne({ username: userId }).select("_id");
-
-      if (!foundUser) {
-        throw new Error(`User with username ${userId} not found`);
-      }
-    }
+    const foundUser = await User.findById(userId).select("_id");
 
     const existingChat = await Chat.findOne({
       $and: [

@@ -46,12 +46,14 @@ const ChatHeader = () => {
   const currentChannel = useSelector((state) => state.channel.currentChannel);
 
   const handleBackClick = () => {
-    dispatch(
-      updateLatestMessage({
-        message: messages[messages.length - 1],
-        chatId: isGroup ? currentChannel?._id : currentContact?.chatId,
-      })
-    );
+    if (messages.length !== 0)
+      dispatch(
+        updateLatestMessage({
+          message: messages[messages.length - 1],
+          chatId: isGroup ? currentChannel?._id : currentContact?.chatId,
+        })
+      );
+
     dispatch(setIsadmin(true));
     dispatch(removeSelectedContact());
     dispatch(removeCurrentChannel());

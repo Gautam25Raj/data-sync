@@ -37,6 +37,56 @@ const useUser = () => {
     }
   };
 
+  const getUserByEmail = async (email) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/email/${email}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error);
+      }
+
+      const userData = await response.json();
+
+      return userData.data;
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
+  const getUserByUsername = async (username) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/username/${username}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error);
+      }
+
+      const userData = await response.json();
+
+      return userData.data;
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
   const signUpUser = async ({ email, username, password }) => {
     if (!email || !password || !username) {
       toast.warning("Email, Username and password are required");
@@ -211,6 +261,8 @@ const useUser = () => {
     updatedUser,
     deleteUser,
     logoutUser,
+    getUserByEmail,
+    getUserByUsername,
   };
 };
 

@@ -56,12 +56,11 @@ const ChannelMenuBtn = ({ channelId, isAdmin }) => {
   };
 
   return (
-    <Menu placement="top-middle">
+    <Menu placement="top">
       <MenuHandler>
         <button
           color="gray"
           size="sm"
-          rounded={true}
           className="absolute right-2 top-1/2 transform -translate-y-1/2 z-[5] p-2 bg-gray-200 rounded-full hover:bg-gray-800 hover:text-white transition-colors"
         >
           <BsThreeDotsVertical />

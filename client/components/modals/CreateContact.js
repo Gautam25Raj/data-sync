@@ -150,18 +150,46 @@ import { useDispatch, useSelector } from "react-redux";
 import useContact from "@/hooks/useContact";
 
 import { toggleNewContactModal } from "@/redux/slice/modalSlice";
+import useUser from "@/hooks/useUser";
+import { toast } from "sonner";
 
 export default function AddContactPopUp() {
   const dispatch = useDispatch();
-  const [queryType, setQueryType] = useState("name");
+  const [queryType, setQueryType] = useState("username");
+
+  const { getUserByUsername, getUserByEmail } = useUser();
+
   const [query, setQuery] = useState("");
   const [users, setUsers] = useState(null);
   const isOpen = useSelector((state) => state.modal.newContactModal);
 
-  const handleSearchClick = (e) => {
+  const handleSearchClick = async (e) => {
     e.preventDefault();
 
-    console.log("Search clicked");
+    if (query === "") {
+      toast.error("Please enter a username or email");
+      return;
+    }
+
+    if (queryType === "username") {
+      const data = await getUserByUsername(query);
+
+      if (data) {
+        setUsers([data]);
+        return;
+      }
+
+      setUsers(null);
+    } else {
+      const data = await getUserByEmail(query);
+
+      if (data) {
+        setUsers([data]);
+        return;
+      }
+
+      setUsers(null);
+    }
   };
 
   return (
@@ -171,10 +199,10 @@ export default function AddContactPopUp() {
           <div className="w-[668px] h-full px-4 py-5 flex items-center justify-center">
             <div
               className="w-full rounded-lg p-[0.5px]"
-              style={{
-                background:
-                  "linear-gradient(261deg, #26FFFF 5.76%, #4AFF93 94.17%)",
-              }}
+              // style={{
+              //   background:
+              //     "linear-gradient(261deg, #26FFFF 5.76%, #4AFF93 94.17%)",
+              // }}
             >
               <div className={"h-full w-full rounded-lg bg-white "}>
                 <Card className={"h-full w-full rounded-lg bg-white pb-1"}>
@@ -203,6 +231,7 @@ export default function AddContactPopUp() {
                         onClick={() => {
                           dispatch(toggleNewContactModal());
                           setUsers(null);
+                          setQuery("");
                         }}
                       />
                     </div>
@@ -237,8 +266,8 @@ export default function AddContactPopUp() {
                             value={queryType}
                             onChange={(e) => setQueryType(e)}
                           >
-                            <Option value="name">User Name</Option>
-                            <Option value="address">User Email</Option>
+                            <Option value="username">Username</Option>
+                            <Option value="email">User Email</Option>
                           </Select>
                         </div>
                       </div>
@@ -264,22 +293,22 @@ export default function AddContactPopUp() {
                       Results
                     </Typography>
 
-                    {/* {users ? (
+                    {users ? (
                       users.length > 0 ? (
                         users.map((user) => (
                           <ContactTabSearch
-                            key={user.pubkey}
-                            name={user.firstName + " " + user.lastName}
-                            pubkey={user.pubkey}
-                            avatarId={user.avatarId}
+                            key={user._id}
+                            username={user.username}
+                            email={user.email}
+                            id={user._id}
                           />
                         ))
                       ) : (
                         <p>No user found</p>
                       )
                     ) : (
-                      <p>No user found</p>
-                    )} */}
+                      <p>Search contacts by Username or Email</p>
+                    )}
                   </CardBody>
                 </Card>
               </div>

@@ -49,9 +49,8 @@ const ChannelJoinedBtn = ({ activeItem, handleItemClick }) => {
         </p>
       ) : (
         joinedChannels.map((channel) => (
-          <div className="relative">
+          <div key={channel._id} className="relative">
             <SideNavItem
-              key={channel._id}
               label={channel.name}
               href={`/channel/${channel._id}`}
               icon={<CloudIcon className="text-black bg-black" />}

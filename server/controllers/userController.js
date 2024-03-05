@@ -16,6 +16,38 @@ exports.getUser = async (req, res) => {
   }
 };
 
+exports.getUserByEmail = async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.params.email }).select(
+      "-password"
+    );
+
+    if (!user) throw new Error("User not found.");
+
+    res.status(200).json({ data: user });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Error fetching user.", error: err.message });
+  }
+};
+
+exports.getUserByUsername = async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.params.username }).select(
+      "-password"
+    );
+
+    if (!user) throw new Error("User not found.");
+
+    res.status(200).json({ data: user });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Error fetching user.", error: err.message });
+  }
+};
+
 exports.postUser = async (req, res) => {
   const { email, username, password } = req.body;
 
