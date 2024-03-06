@@ -3,7 +3,7 @@
 import { useSelector } from "react-redux";
 import { DialogBody, Typography } from "@material-tailwind/react";
 
-import ContactTabSearch from "@/components/chat/contacts/ContactTabSearch";
+import ChannelContact from "./ChannelContact";
 
 const RightChannelModal = ({ channelUsers, setChannelUsers }) => {
   const currentUser = useSelector((state) => state.user.user);
@@ -28,12 +28,12 @@ const RightChannelModal = ({ channelUsers, setChannelUsers }) => {
           color="gray"
           variant="lead"
         >
-          Click on the Contacts below to Add them in channel members.
+          Add contacts to your channel
         </Typography>
 
         <div className="overflow-y-auto max-h-72 hide-scroll space-y-2">
           {availableContacts.map((contact) => (
-            <ContactTabSearch
+            <ChannelContact
               key={contact._id}
               username={
                 contact.users[0]._id === currentUser._id
@@ -41,6 +41,7 @@ const RightChannelModal = ({ channelUsers, setChannelUsers }) => {
                   : contact.users[0].username
               }
               id={contact._id}
+              channelUsers={channelUsers}
               setChannelUsers={setChannelUsers}
             />
           ))}

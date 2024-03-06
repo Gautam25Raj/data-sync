@@ -6,12 +6,14 @@ import AblyAuthProvider from "@/providers/AblyProvider";
 
 import CreateContact from "@/components/modals/CreateContact";
 import NewChannelModal from "@/components/modals/NewChannelModal";
+import EditChannelModal from "@/components/modals/EditChannelModal";
 
 const HomeLayout = ({ children }) => {
   return (
     <AuthProvider>
       <AblyAuthProvider>
         <div className="bg-gray-100 flex hide-scroll">
+          <EditChannelModal />
           <NewChannelModal />
           <CreateContact />
           <Sidebar />

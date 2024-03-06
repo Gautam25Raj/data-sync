@@ -16,25 +16,25 @@ import { useDispatch, useSelector } from "react-redux";
 
 import useChannel from "@/hooks/useChannel";
 
-import { togglenewChannelModal } from "@/redux/slice/modalSlice";
+import { toggleEditChannelModal } from "@/redux/slice/modalSlice";
 
 import LeftChannelModal from "./channelModal/LeftChannelModal";
 import RightChannelModal from "./channelModal/RightChannelModal";
 
-const NewChannelModal = () => {
+const EditChannelModal = () => {
   const dispatch = useDispatch();
-  const { createChannel } = useChannel();
+  const { updateChannel } = useChannel();
 
   const [channelName, setChannelName] = useState("");
   const [channelUsers, setChannelUsers] = useState("");
-  const [channelTableau, setChannelTableau] = useState([]);
+  const [channelTableau, setChannelTableau] = useState("");
 
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const open = useSelector((state) => state.modal.newChannelModal);
+  const open = useSelector((state) => state.modal.editChannelModal);
 
   const handleOpen = () => {
-    dispatch(togglenewChannelModal());
+    dispatch(toggleEditChannelModal());
   };
 
   const handleCreateChannel = async () => {
@@ -55,7 +55,7 @@ const NewChannelModal = () => {
 
       const usersArray = channelUsers.split(",").map((user) => user.trim());
 
-      const response = await createChannel(
+      const response = await updateChannel(
         channelName,
         usersArray,
         channelTableau
@@ -81,7 +81,7 @@ const NewChannelModal = () => {
         <DialogHeader className="flex flex-col items-start">
           {" "}
           <Typography className="mb-1" variant="h4">
-            Create New Channel
+            Edit Channel
           </Typography>
         </DialogHeader>
 
@@ -121,7 +121,7 @@ const NewChannelModal = () => {
           {isLoaded ? (
             <AiOutlineLoading3Quarters className="mx-auto animate-spin" />
           ) : (
-            "Create Channel"
+            "Update Channel"
           )}
         </Button>
       </DialogFooter>
@@ -129,4 +129,4 @@ const NewChannelModal = () => {
   );
 };
 
-export default NewChannelModal;
+export default EditChannelModal;

@@ -7,6 +7,7 @@ const modalSlice = createSlice({
     confirmModal: false,
     newChannelModal: false,
     newContactModal: false,
+    editChannelModal: true,
   },
 
   reducers: {
@@ -21,6 +22,10 @@ const modalSlice = createSlice({
     toggleNewContactModal: (state) => {
       state.newContactModal = !state.newContactModal;
     },
+
+    toggleEditChannelModal: (state) => {
+      state.editChannelModal = !state.editChannelModal;
+    },
   },
 });
 
@@ -28,6 +33,7 @@ export const {
   toggleConfirmModal,
   togglenewChannelModal,
   toggleNewContactModal,
+  toggleEditChannelModal,
 } = modalSlice.actions;
 
 export default modalSlice.reducer;

@@ -22,7 +22,7 @@ const LeftChannelModal = ({
           color="gray"
           variant="lead"
         >
-          Write your channel name and add members to create a new channel.
+          Edit you channel details and members here
         </Typography>
 
         <div className="grid gap-6 overflow-y-auto max-h-72 hide-scroll">

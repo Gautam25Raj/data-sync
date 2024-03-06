@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import useChannel from "@/hooks/useChannel";
 
 import { setCurrentChannel } from "@/redux/slice/channelSlice";
+import { toggleEditChannelModal } from "@/redux/slice/modalSlice";
 
 const ChannelMenuBtn = ({ channelId, isAdmin }) => {
   const dispatch = useDispatch();
@@ -24,7 +25,7 @@ const ChannelMenuBtn = ({ channelId, isAdmin }) => {
   const currentChannel = useSelector((state) => state.channel.currentChannel);
 
   const handleInviteMember = () => {
-    console.log("Invite member");
+    dispatch(toggleEditChannelModal());
   };
 
   const handleInviteLink = () => {
@@ -69,7 +70,7 @@ const ChannelMenuBtn = ({ channelId, isAdmin }) => {
       </MenuHandler>
 
       <MenuList className="p-1">
-        <MenuItem onClick={handleInviteMember}>Invite Member</MenuItem>
+        <MenuItem onClick={handleInviteMember}>Edit Channel</MenuItem>
 
         <MenuItem onClick={handleInviteLink}>Copy Invite Link</MenuItem>
 

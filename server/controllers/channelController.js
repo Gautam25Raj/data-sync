@@ -116,7 +116,7 @@ const createChannel = async (req, res) => {
 const updateChannel = async (req, res) => {
   const { id } = req.params;
   const currentUser = req.userData;
-  const { name, users } = req.body;
+  const { name, users, tableau } = req.body;
 
   try {
     if (!id) {
@@ -141,6 +141,10 @@ const updateChannel = async (req, res) => {
 
     if (name) {
       updateData.name = name;
+    }
+
+    if (tableau) {
+      updateData.tableau = tableau;
     }
 
     if (users && users.length) {
