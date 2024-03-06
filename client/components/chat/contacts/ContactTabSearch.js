@@ -56,14 +56,17 @@ export default function ContactTabSearch({ username, email, id }) {
           </div>
 
           <button
-            className="flex justify-center items-center p-2 rounded-full w-8 bg-black"
+            className="flex justify-center items-center p-2 rounded-full w-8"
+            style={{
+              backgroundColor: chatCreated ? "#1a1a1a" : "#000",
+            }}
             // style={{
             //   background: "linear-gradient(90deg, #4AFF93 0%, #26FFFF 100%)",
             // }}
             onClick={handleAddContact}
           >
             {chatCreated ? (
-              <IoCheckmark className="h-4 w-4 text-white" />
+              <IoCheckmark className="h-4 w-4 text-green-300" />
             ) : (
               <PlusIcon className="h-4 w-4 text-white" />
             )}

@@ -3,31 +3,30 @@
 import {
   Button,
   Dialog,
-  DialogHeader,
-  DialogBody,
   DialogFooter,
+  DialogHeader,
   Typography,
 } from "@material-tailwind/react";
-import { IoClose } from "react-icons/io5";
 
 import { toast } from "sonner";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 import useChannel from "@/hooks/useChannel";
 
 import { togglenewChannelModal } from "@/redux/slice/modalSlice";
 
-import FormInput from "../ui/FormInput";
-import FormTextarea from "../ui/FormTextarea";
+import LeftChannelModal from "./channelModal/LeftChannelModal";
+import RightChannelModal from "./channelModal/RightChannelModal";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { IoClose } from "react-icons/io5";
 
 const NewChannelModal = () => {
   const dispatch = useDispatch();
   const { createChannel } = useChannel();
 
   const [channelName, setChannelName] = useState("");
-  const [channelUsers, setChannelUsers] = useState([]);
+  const [channelUsers, setChannelUsers] = useState("");
   const [channelTableau, setChannelTableau] = useState([]);
 
   const [isLoaded, setIsLoaded] = useState(false);
@@ -44,6 +43,10 @@ const NewChannelModal = () => {
     try {
       if (!channelName) {
         throw new Error("Channel name is required.");
+      }
+
+      if (!channelTableau) {
+        throw new Error("Tableau Public is required.");
       }
 
       if (channelUsers.length < 1 || !channelUsers) {
@@ -72,7 +75,7 @@ const NewChannelModal = () => {
   };
 
   return (
-    <Dialog open={open} size="xs" handler={handleOpen}>
+    <Dialog open={open} size="lg" handler={handleOpen}>
       <div className="flex items-center justify-between p-2">
         <DialogHeader className="flex flex-col items-start">
           {" "}
@@ -85,53 +88,28 @@ const NewChannelModal = () => {
           onClick={handleOpen}
           className="bg-transparent p-1 shadow-none hover:shadow-none hover:bg-gray-200"
         >
-          <IoClose className="h-6 w-6 text-black " />
+          <IoClose className="h-6 w-6 text-black" />
         </Button>
       </div>
 
-      <DialogBody className="!p-6">
-        <Typography
-          className="mb-10 -mt-12 text-lg w-10/12 text-md"
-          color="gray"
-          variant="lead"
-        >
-          Write your channel name and add members to create a new channel.
-        </Typography>
+      <div className="flex">
+        <LeftChannelModal
+          channelName={channelName}
+          setChannelName={setChannelName}
+          channelUsers={channelUsers}
+          setChannelUsers={setChannelUsers}
+          channelTableau={channelTableau}
+          setChannelTableau={setChannelTableau}
+          handleCreateChannel={handleCreateChannel}
+          handleOpen={handleOpen}
+          isLoaded={isLoaded}
+        />
 
-        <div className="grid gap-6">
-          <FormInput
-            label="Channel Name"
-            id={"channel-name"}
-            type={"text"}
-            placeholder={"Channel Name"}
-            input={channelName}
-            setInput={setChannelName}
-            required
-          />
-
-          <FormInput
-            label="Tableau Public Url"
-            id={"tableau-url"}
-            type={"text"}
-            placeholder={
-              "https://public.tableau.com/views/ExploringHistoricallyBlackCollegesandUniversities/ExploringHBCU"
-            }
-            input={channelTableau}
-            setInput={setChannelTableau}
-            required
-          />
-
-          <FormTextarea
-            label="Channel Members"
-            id={"channel-members"}
-            type={"text"}
-            placeholder={"Separate user emails with commas (,)"}
-            input={channelUsers}
-            setInput={setChannelUsers}
-            required
-          />
-        </div>
-      </DialogBody>
+        <RightChannelModal
+          channelUsers={channelUsers}
+          setChannelUsers={setChannelUsers}
+        />
+      </div>
 
       <DialogFooter className="space-x-2">
         <Button variant="outlined" color="red" onClick={handleOpen}>
