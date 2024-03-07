@@ -59,7 +59,6 @@ exports.fetchChannelMessages = async (req, res) => {
     }
 
     const channelExists = await Channel.findById(channelId);
-    console.log(channelExists);
 
     if (!channelExists) {
       throw new Error("Channel not found.");

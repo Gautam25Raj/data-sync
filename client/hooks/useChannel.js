@@ -143,7 +143,10 @@ const useChannel = () => {
 
       const updatedChannel = await response.json();
 
+      toast.success("Channel updated successfully.");
       dispatch(updateChannelRedux(updatedChannel));
+
+      return updatedChannel;
     } catch (err) {
       toast.error(err.message);
     }

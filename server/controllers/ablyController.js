@@ -14,8 +14,6 @@ const ably = new Ably.Rest({
 });
 
 const ablyAuth = (req, res) => {
-  console.log("Successfully connected to the server auth endpoint");
-
   try {
     const { userId } = req.params;
 
@@ -38,23 +36,4 @@ const ablyAuth = (req, res) => {
   }
 };
 
-const createChannel = async (req, res) => {
-  try {
-    const { chatId } = req.params;
-
-    if (!chatId) {
-      return res.status(400).json({ error: "Missing required fields" });
-    }
-
-    const channelName = `chatId-${chatId}`;
-
-    const channel = ably.channels.get(channelName);
-
-    return res.status(200).json({ channel: channel.name });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Internal Server Error" });
-  }
-};
-
-module.exports = { ablyAuth, createChannel };
+module.exports = { ablyAuth };

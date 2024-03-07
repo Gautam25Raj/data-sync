@@ -93,10 +93,9 @@ const EditChannelModal = () => {
         setChannelUsers("");
         setChannelTableau("");
       }
-
-      setIsLoaded(false);
     } catch (err) {
       toast.error(err.message);
+    } finally {
       setIsLoaded(false);
     }
   };
