@@ -18,10 +18,10 @@ const ContactsItem = ({ chat }) => {
   const currentUser = useSelector((state) => state.user.user);
 
   useEffect(() => {
-    if (chat.users[0]._id === currentUser.id) {
-      setUser(chat.users[0]);
-    } else {
+    if (chat.users[0]._id === currentUser._id) {
       setUser(chat.users[1]);
+    } else {
+      setUser(chat.users[0]);
     }
 
     // return () => {
