@@ -2,6 +2,8 @@
 
 import { Button } from "@material-tailwind/react";
 
+import { Magic } from "magic-sdk";
+
 import { toast } from "sonner";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -21,6 +23,13 @@ const SignUpForm = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
+
+  const magic = new Magic(process.env.NEXT_PUBLIC_API_KEY, {
+    network: {
+      rpcUrl: "<https://rpc2.sepolia.org/>",
+      chainId: 11155111,
+    },
+  });
 
   const handleSignUp = async () => {
     setIsLoading(true);
@@ -42,6 +51,11 @@ const SignUpForm = () => {
         throw new Error("Password should be at least 6 characters long");
       }
 
+      const did = await magic.auth.loginWithEmailOTP({
+        email: email,
+        showUI: true,
+      });
+
       const response = await signUpUser({ email, username, password });
 
       if (response) {
@@ -49,6 +63,8 @@ const SignUpForm = () => {
       }
 
       setIsLoading(false);
+
+      toast.loading("Logging in...");
     } catch (error) {
       toast.error(error.message);
       setIsLoading(false);

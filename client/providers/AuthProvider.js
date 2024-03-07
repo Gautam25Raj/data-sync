@@ -49,8 +49,8 @@ const AuthProvider = ({ children }) => {
 
           const data = await response.json();
 
-          toast.success("Logged in successfully.");
           localStorage.setItem("token", data.token);
+          toast.success("Logged in successfully.");
         } else {
           router.push("/");
         }
