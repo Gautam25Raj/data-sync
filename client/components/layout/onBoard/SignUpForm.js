@@ -24,13 +24,6 @@ const SignUpForm = () => {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const magic = new Magic(process.env.NEXT_PUBLIC_API_KEY, {
-    network: {
-      rpcUrl: "<https://rpc2.sepolia.org/>",
-      chainId: 11155111,
-    },
-  });
-
   const handleSignUp = async () => {
     setIsLoading(true);
 
@@ -51,7 +44,9 @@ const SignUpForm = () => {
         throw new Error("Password should be at least 6 characters long");
       }
 
-      const did = await magic.auth.loginWithEmailOTP({
+      const magic = new Magic(process.env.NEXT_PUBLIC_API_KEY);
+
+      await magic.auth.loginWithEmailOTP({
         email: email,
         showUI: true,
       });
