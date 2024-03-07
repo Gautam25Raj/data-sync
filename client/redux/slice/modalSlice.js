@@ -7,7 +7,7 @@ const modalSlice = createSlice({
     confirmModal: false,
     newChannelModal: false,
     newContactModal: false,
-    editChannelModal: true,
+    editChannelModal: false,
   },
 
   reducers: {

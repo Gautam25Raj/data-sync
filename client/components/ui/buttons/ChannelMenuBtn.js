@@ -13,7 +13,12 @@ import { useDispatch, useSelector } from "react-redux";
 
 import useChannel from "@/hooks/useChannel";
 
-import { setCurrentChannel } from "@/redux/slice/channelSlice";
+import {
+  leaveJoinedChannel,
+  setCurrentChannel,
+  setCurrentActionChannel,
+  deleteChannel as deleteChannelAction,
+} from "@/redux/slice/channelSlice";
 import { toggleEditChannelModal } from "@/redux/slice/modalSlice";
 
 const ChannelMenuBtn = ({ channelId, isAdmin }) => {
@@ -22,9 +27,11 @@ const ChannelMenuBtn = ({ channelId, isAdmin }) => {
   const { deleteChannel, leaveChannel } = useChannel();
 
   const user = useSelector((state) => state.user.user);
+
   const currentChannel = useSelector((state) => state.channel.currentChannel);
 
   const handleInviteMember = () => {
+    dispatch(setCurrentActionChannel(channelId));
     dispatch(toggleEditChannelModal());
   };
 
@@ -35,11 +42,14 @@ const ChannelMenuBtn = ({ channelId, isAdmin }) => {
 
   const handleDeleteChannel = async () => {
     try {
+      if (currentChannel && currentChannel._id === channelId) {
+        toast.error("You can't delete the current channel");
+        return;
+      }
+
       await deleteChannel(channelId);
 
-      if (currentChannel._id === channelId) {
-        dispatch(setCurrentChannel(null));
-      }
+      dispatch(deleteChannelAction(channelId));
     } catch (err) {
       toast.error(err.message);
     }
@@ -49,7 +59,9 @@ const ChannelMenuBtn = ({ channelId, isAdmin }) => {
     try {
       await leaveChannel(channelId);
 
-      if (currentChannel._id === channelId) {
+      dispatch(leaveJoinedChannel(channelId));
+
+      if (currentChannel && currentChannel._id === channelId) {
         dispatch(setCurrentChannel(null));
       }
     } catch (err) {

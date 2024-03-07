@@ -2,6 +2,8 @@ const Channel = require("../models/Channel");
 const User = require("../models/User");
 const Message = require("../models/Message");
 
+const ObjectId = require("mongoose").Types.ObjectId;
+
 const getChannel = async (req, res) => {
   const { id } = req.params;
   const currentUser = req.userData;
@@ -147,9 +149,9 @@ const updateChannel = async (req, res) => {
       updateData.tableau = tableau;
     }
 
-    if (users && users.length) {
-      let userIds = [...channel.users];
+    let userIds = [];
 
+    if (users && users.length) {
       for (let user of users) {
         let foundUser;
 
@@ -173,6 +175,12 @@ const updateChannel = async (req, res) => {
       }
 
       updateData.users = userIds;
+    }
+
+    const userIdsAsString = userIds.map((userId) => userId.toString());
+
+    if (!userIdsAsString.includes(currentUser.id)) {
+      userIds.push(new ObjectId(currentUser.id));
     }
 
     if (!Object.keys(updateData).length) {

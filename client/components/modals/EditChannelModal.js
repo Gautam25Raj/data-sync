@@ -11,7 +11,7 @@ import { IoClose } from "react-icons/io5";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 import { toast } from "sonner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import useChannel from "@/hooks/useChannel";
@@ -20,10 +20,13 @@ import { toggleEditChannelModal } from "@/redux/slice/modalSlice";
 
 import LeftChannelModal from "./channelModal/LeftChannelModal";
 import RightChannelModal from "./channelModal/RightChannelModal";
+import { removeCurrentActionChannel } from "@/redux/slice/channelSlice";
 
 const EditChannelModal = () => {
   const dispatch = useDispatch();
-  const { updateChannel } = useChannel();
+  const { getChannel, updateChannel } = useChannel();
+
+  const [channelDetails, setChannelDetails] = useState({});
 
   const [channelName, setChannelName] = useState("");
   const [channelUsers, setChannelUsers] = useState("");
@@ -31,11 +34,33 @@ const EditChannelModal = () => {
 
   const [isLoaded, setIsLoaded] = useState(false);
 
+  const currentActionChannel = useSelector(
+    (state) => state.channel.currentActionChannel
+  );
   const open = useSelector((state) => state.modal.editChannelModal);
 
   const handleOpen = () => {
     dispatch(toggleEditChannelModal());
   };
+
+  useEffect(() => {
+    if (open) {
+      getChannel(currentActionChannel).then((channel) => {
+        setChannelDetails(channel);
+        setChannelName(channel.name);
+        setChannelUsers(channel.users.map((user) => user.username).join(", "));
+        setChannelTableau(channel.tableau);
+        console.log(channel);
+      });
+    }
+
+    return () => {
+      removeCurrentActionChannel();
+      setChannelName("");
+      setChannelUsers("");
+      setChannelTableau("");
+    };
+  }, [open, currentActionChannel]);
 
   const handleCreateChannel = async () => {
     setIsLoaded(true);
@@ -56,6 +81,7 @@ const EditChannelModal = () => {
       const usersArray = channelUsers.split(",").map((user) => user.trim());
 
       const response = await updateChannel(
+        currentActionChannel,
         channelName,
         usersArray,
         channelTableau

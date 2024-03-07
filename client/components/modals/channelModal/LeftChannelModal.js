@@ -25,7 +25,7 @@ const LeftChannelModal = ({
           Edit you channel details and members here
         </Typography>
 
-        <div className="grid gap-6 overflow-y-auto max-h-72 hide-scroll">
+        <div className="grid gap-6 overflow-y-auto max-h-80 hide-scroll">
           <FormInput
             label="Channel Name"
             id={"channel-name"}

@@ -19,7 +19,7 @@ const TagInputs = ({
   };
 
   return (
-    <div className="usernames-input" onKeyDown={handleBackspace}>
+    <div onKeyDown={handleBackspace}>
       <Typography
         as="label"
         htmlFor={id}

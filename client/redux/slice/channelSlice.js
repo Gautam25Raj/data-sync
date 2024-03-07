@@ -9,6 +9,7 @@ const channelSlice = createSlice({
     joinedChannels: [],
     searchedJoinedChannels: [],
     currentChannel: null,
+    currentActionChannel: null,
   },
 
   reducers: {
@@ -31,6 +32,7 @@ const channelSlice = createSlice({
     },
 
     deleteChannel: (state, action) => {
+      console.log("delete channel", action.payload);
       state.channels = state.channels.filter(
         (channel) => channel._id !== action.payload
       );
@@ -61,6 +63,14 @@ const channelSlice = createSlice({
     removeCurrentChannel: (state) => {
       state.currentChannel = null;
     },
+
+    setCurrentActionChannel: (state, action) => {
+      state.currentActionChannel = action.payload;
+    },
+
+    removeCurrentActionChannel: (state) => {
+      state.currentActionChannel = null;
+    },
   },
 });
 
@@ -76,6 +86,8 @@ export const {
   leaveJoinedChannel,
   setCurrentChannel,
   removeCurrentChannel,
+  setCurrentActionChannel,
+  removeCurrentActionChannel,
 } = channelSlice.actions;
 
 export default channelSlice.reducer;

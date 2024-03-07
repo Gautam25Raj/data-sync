@@ -21,7 +21,6 @@ const ChannelPage = ({ params: { channelId } }) => {
   const canvas = useRef(null);
 
   const currentUser = useSelector((state) => state.user.user);
-  const currentChannel = useSelector((state) => state.channel.currentChannel);
 
   useEffect(() => {
     const fetch = async () => {
@@ -30,13 +29,18 @@ const ChannelPage = ({ params: { channelId } }) => {
     };
 
     fetch();
+
+    return () => {
+      setChannel(null);
+    };
   }, []);
 
   const handleShowCursors = () => {
     setShowCursors((prev) => !prev);
   };
 
-  return currentChannel ? (
+  return (
+    // currentChannel ? (
     <>
       <div className="flex flex-col h-screen py-2 ml-2 flex-1 w-full relative prevent-select">
         <button
@@ -68,25 +72,26 @@ const ChannelPage = ({ params: { channelId } }) => {
 
       {showCursors && <Whiteboard ctx={ctx} canvas={canvas} />}
     </>
-  ) : (
-    <div className="flex flex-col h-screen py-2 ml-2 flex-1 w-full relative prevent-select">
-      <Card className="rounded-xl bg-white flex-1 flex-grow ">
-        <div className="flex justify-center items-center flex-col flex-grow -mt-20">
-          <Image
-            src="/assets/datasync-logo.png"
-            width={200}
-            height={200}
-            alt="Data Sync Logo"
-            className="w-fit mx-auto"
-          />
-
-          <h2 className="text-3xl font-bold w-fit mx-auto">
-            No Channel Selected
-          </h2>
-        </div>
-      </Card>
-    </div>
   );
+  // ) : (
+  //   <div className="flex flex-col h-screen py-2 ml-2 flex-1 w-full relative prevent-select">
+  //     <Card className="rounded-xl bg-white flex-1 flex-grow ">
+  //       <div className="flex justify-center items-center flex-col flex-grow -mt-20">
+  //         <Image
+  //           src="/assets/datasync-logo.png"
+  //           width={200}
+  //           height={200}
+  //           alt="Data Sync Logo"
+  //           className="w-fit mx-auto"
+  //         />
+
+  //         <h2 className="text-3xl font-bold w-fit mx-auto">
+  //           No Channel Selected
+  //         </h2>
+  //       </div>
+  //     </Card>
+  //   </div>
+  // );
 };
 
 export default ChannelPage;
