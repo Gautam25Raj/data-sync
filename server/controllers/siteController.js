@@ -50,10 +50,18 @@ const getAllSitesByAdmin = async (req, res) => {
 
 const createSite = async (req, res) => {
   const siteData = req.body;
+  console.log(siteData);
+  const user = req.userData;
+
+  if (!user) {
+    throw new Error("User not found.");
+  }
 
   if (!siteData) {
     throw new Error("Site data is required.");
   }
+
+  siteData.admin = user.id;
 
   try {
     const site = new Site(siteData);
@@ -64,6 +72,7 @@ const createSite = async (req, res) => {
     if (error.name === "ValidationError") {
       throw new Error("Invalid site data.");
     }
+    console.log(error);
 
     throw new Error("Error creating site.");
   }

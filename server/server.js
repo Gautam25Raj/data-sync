@@ -40,6 +40,7 @@ app.use("/api/contact", require("./routes/contactRoutes"));
 app.use("/api/message", require("./routes/messageRoutes"));
 app.use("/api/channel", require("./routes/channelRoutes"));
 app.use("/api/invite", require("./routes/inviteRoutes"));
+app.use("/api/site", require("./routes/siteRoutes"));
 
 io.on("connection", (socket) => {
   console.log("New client connected");

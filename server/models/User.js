@@ -20,13 +20,6 @@ const UserSchema = new Schema(
       type: String,
       required: true,
     },
-
-    sites: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Site",
-      },
-    ],
   },
 
   { versionKey: false }
