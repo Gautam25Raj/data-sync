@@ -35,6 +35,9 @@ const NewChannelModal = () => {
 
   const handleOpen = () => {
     dispatch(togglenewChannelModal());
+    setChannelName("");
+    setChannelUsers("");
+    setChannelTableau("");
   };
 
   const handleCreateChannel = async () => {

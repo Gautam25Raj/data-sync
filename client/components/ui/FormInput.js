@@ -13,7 +13,7 @@ const FormInput = ({
   required,
 }) => {
   return (
-    <div>
+    <div className="w-full">
       <Typography
         as="label"
         htmlFor={id}
