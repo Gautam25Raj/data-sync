@@ -1,7 +1,10 @@
 import { ListItem } from "@material-tailwind/react";
-import SiteMenuBtn from "./SiteMenuButton";
+
 import { useDispatch } from "react-redux";
+
 import { setCurrentSite } from "@/redux/slice/siteSlice";
+
+import SiteMenuBtn from "./SiteMenuButton";
 
 const SiteItems = ({ site }) => {
   const dispatch = useDispatch();
@@ -11,13 +14,12 @@ const SiteItems = ({ site }) => {
   };
 
   return (
-    <ListItem
-      className="flex justify-between shadow relative"
-      onClick={handleItemClick}
-    >
-      <p>{site.name}</p>
+    <ListItem className="flex justify-between shadow relative p-0 bg-white">
+      <p className="p-3 flex-1" onClick={handleItemClick}>
+        {site.name}
+      </p>
 
-      <SiteMenuBtn siteId={site._id} />
+      <SiteMenuBtn site={site} />
     </ListItem>
   );
 };

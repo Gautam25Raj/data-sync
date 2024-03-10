@@ -10,6 +10,7 @@ import {
   setSite,
   updateSite as updateSiteRedux,
   deleteSite as deleteSiteRedux,
+  clearCurrentSite,
 } from "@/redux/slice/siteSlice";
 
 const useSite = () => {
@@ -151,6 +152,7 @@ const useSite = () => {
       }
 
       dispatch(deleteSiteRedux(siteId));
+      // dispatch(clearCurrentSite());
 
       toast.success("Deleted Site");
     } catch (err) {

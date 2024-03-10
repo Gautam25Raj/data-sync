@@ -27,7 +27,7 @@ const Form = ({ setIsClicked }) => {
         </div>
 
         <div className="w-full flex flex-grow justify-between items-center">
-          <MultiForm />
+          <MultiForm setIsClicked={setIsClicked} />
         </div>
       </div>
     </Suspense>

@@ -16,7 +16,7 @@ import Step2 from "./steps/Step2";
 import Step3 from "./steps/Step3";
 import { toast } from "sonner";
 
-const MultiForm = () => {
+const MultiForm = ({ setIsClicked }) => {
   const { createSite } = useSite();
 
   const [activeStep, setActiveStep] = React.useState(0);
@@ -72,6 +72,8 @@ const MultiForm = () => {
     });
 
     if (response) {
+      setIsClicked(false);
+
       setActiveStep(0);
       setSiteName("");
       setTableauUsername("");

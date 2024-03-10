@@ -12,8 +12,8 @@ const Step3 = ({
   return (
     <div className="space-y-4 max-w-md w-full mx-auto">
       <FormInput
-        label="Your App Secret ID"
-        id={"app-secret-id"}
+        label="Personal Access Token ID"
+        id={"pat-id"}
         type={"password"}
         placeholder={"abcd-efgh-ijkl-mnop-qrst"}
         input={patName}
@@ -21,8 +21,8 @@ const Step3 = ({
       />
 
       <FormInput
-        label="Your App Secret Value"
-        id={"app-secret-value"}
+        label="Personal Access Token Value"
+        id={"pat-value"}
         type={"password"}
         placeholder={"abcd-efgh-ijkl-mnop-qrst"}
         input={patSecret}

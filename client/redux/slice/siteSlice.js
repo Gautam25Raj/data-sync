@@ -6,6 +6,7 @@ const siteSlice = createSlice({
   initialState: {
     sites: [],
     currentSite: null,
+    currentActionSite: null,
   },
 
   reducers: {
@@ -38,6 +39,14 @@ const siteSlice = createSlice({
     clearCurrentSite: (state) => {
       state.currentSite = null;
     },
+
+    setCurrentActionSite: (state, action) => {
+      state.currentActionSite = action.payload;
+    },
+
+    clearCurrentActionSite: (state) => {
+      state.currentActionSite = null;
+    },
   },
 });
 
@@ -49,6 +58,8 @@ export const {
   clearSite,
   setCurrentSite,
   clearCurrentSite,
+  setCurrentActionSite,
+  clearCurrentActionSite,
 } = siteSlice.actions;
 
 export default siteSlice.reducer;

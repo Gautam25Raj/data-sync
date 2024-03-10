@@ -9,21 +9,26 @@ import {
 import { BsThreeDotsVertical } from "react-icons/bs";
 
 import { toast } from "sonner";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+
 import useSite from "@/hooks/useSite";
 
-const SiteMenuBtn = ({ siteId }) => {
+import { toggleEditSiteModal } from "@/redux/slice/modalSlice";
+import { setCurrentActionSite } from "@/redux/slice/siteSlice";
+
+const SiteMenuBtn = ({ site }) => {
   const dispatch = useDispatch();
 
-  const { deleteSite, updateSite } = useSite();
+  const { deleteSite } = useSite();
 
   const handleEditSite = () => {
-    console.log("edit site");
+    dispatch(setCurrentActionSite(site));
+    dispatch(toggleEditSiteModal());
   };
 
   const handleDeleteSite = async () => {
     try {
-      await deleteSite(siteId);
+      await deleteSite(site._id);
     } catch (error) {
       toast.error("Failed to delete site");
     }
@@ -35,7 +40,7 @@ const SiteMenuBtn = ({ siteId }) => {
         <button
           color="gray"
           size="sm"
-          className="absolute right-2 top-1/2 transform -translate-y-1/2 z-[5] p-1.5 bg-gray-200 rounded-full hover:bg-gray-800 hover:text-white transition-colors"
+          className="z-[5] p-1.5 bg-gray-200 rounded-full hover:bg-gray-800 hover:text-white transition-colors mr-2"
         >
           <BsThreeDotsVertical size={16} />
         </button>

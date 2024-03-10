@@ -3,7 +3,7 @@ import SiteItems from "./SiteItems";
 
 const SiteList = ({ sites }) => {
   return (
-    <List>
+    <List className="bg-gray-50 h-full rounded-lg">
       {sites.map((site) => (
         <SiteItems key={site._id} site={site} />
       ))}
