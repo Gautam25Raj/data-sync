@@ -12,8 +12,6 @@ router
 
 router.route("/").post(authenticate, siteController.createSite);
 
-router
-  .route("/admin/:adminId")
-  .get(authenticate, siteController.getAllSitesByAdmin);
+router.route("/").get(authenticate, siteController.getAllSitesByAdmin);
 
 module.exports = router;
