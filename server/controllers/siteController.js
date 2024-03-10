@@ -26,7 +26,6 @@ const getSite = async (req, res) => {
 
 const getAllSitesByAdmin = async (req, res) => {
   const user = req.userData;
-  console.log(user);
 
   if (!user.id) {
     throw new Error("Admin ID is required.");
@@ -34,7 +33,6 @@ const getAllSitesByAdmin = async (req, res) => {
 
   try {
     const sites = await Site.find({ admin: user.id });
-    console.log(sites);
 
     if (!sites) {
       throw new Error(`No sites found for admin with id ${adminId}`);
@@ -42,7 +40,6 @@ const getAllSitesByAdmin = async (req, res) => {
 
     res.status(200).json(sites);
   } catch (error) {
-    console.log(error);
     if (error.kind === "ObjectId") {
       throw new Error("Invalid Admin ID.");
     }
@@ -53,7 +50,6 @@ const getAllSitesByAdmin = async (req, res) => {
 
 const createSite = async (req, res) => {
   const siteData = req.body;
-  console.log(siteData);
   const user = req.userData;
 
   if (!user) {
@@ -75,7 +71,6 @@ const createSite = async (req, res) => {
     if (error.name === "ValidationError") {
       throw new Error("Invalid site data.");
     }
-    console.log(error);
 
     throw new Error("Error creating site.");
   }

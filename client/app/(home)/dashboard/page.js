@@ -1,10 +1,14 @@
 "use client";
 
 import { Button, Card } from "@material-tailwind/react";
+
 import dynamic from "next/dynamic";
 
 import Image from "next/image";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+
+import SiteList from "@/components/layout/dashboard/sites/SiteList";
 
 const Form = dynamic(() =>
   import("@/components/layout/dashboard/tableauForm/Form")
@@ -13,6 +17,8 @@ const Form = dynamic(() =>
 const DashboardPage = () => {
   const [isClicked, setIsClicked] = useState(false);
 
+  const sites = useSelector((state) => state.site.sites);
+
   const handleConnectToTableau = () => {
     setIsClicked(true);
   };
@@ -20,12 +26,19 @@ const DashboardPage = () => {
   return (
     <div className="flex h-screen py-2 ml-2 flex-1 w-full">
       <Card className="rounded-xl bg-white flex-1 flex flex-grow h-full justify-center items-center">
-        {isClicked ? (
+        {sites.length > 0 ? (
+          <SiteList sites={sites} />
+        ) : isClicked ? (
           <Form setIsClicked={setIsClicked} />
         ) : (
           <>
             <div className="flex items-center flex-col mb-2">
-              <Image src="/assets/datasync-logo.png" width={100} height={100} />
+              <Image
+                src="/assets/datasync-logo.png"
+                alt="datasync-logo"
+                width={100}
+                height={100}
+              />
 
               <h1 className="text-4xl font-bold text-black">
                 Welcome to the DataSync
@@ -36,6 +49,7 @@ const DashboardPage = () => {
               Powered by
               <span>
                 <Image
+                  alt="Tableau logo"
                   src="/assets/tableau-logo.png"
                   width={120}
                   height={120}
