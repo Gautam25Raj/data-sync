@@ -8,6 +8,7 @@ import modalReducer from "./slice/modalSlice";
 import channelReducer from "./slice/channelSlice";
 import messageReducer from "./slice/messageSlice";
 import contactReducer from "./slice/contactSlice";
+import siteReducer from "./slice/siteSlice";
 
 export const store = configureStore({
   reducer: {
@@ -17,6 +18,7 @@ export const store = configureStore({
     channel: channelReducer,
     message: messageReducer,
     contact: contactReducer,
+    site: siteReducer,
   },
 
   middleware: (getDefaultMiddleware) =>

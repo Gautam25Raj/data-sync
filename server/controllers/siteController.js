@@ -26,13 +26,15 @@ const getSite = async (req, res) => {
 
 const getAllSitesByAdmin = async (req, res) => {
   const user = req.userData;
+  console.log(user);
 
   if (!user.id) {
     throw new Error("Admin ID is required.");
   }
 
   try {
-    const sites = await Site.find({ adminId: user.id });
+    const sites = await Site.find({ admin: user.id });
+    console.log(sites);
 
     if (!sites) {
       throw new Error(`No sites found for admin with id ${adminId}`);

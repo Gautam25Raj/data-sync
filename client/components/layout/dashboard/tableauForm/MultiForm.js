@@ -9,11 +9,16 @@ import { Stepper, Step, Button, Typography } from "@material-tailwind/react";
 
 import React from "react";
 
+import useSite from "@/hooks/useSite";
+
 import Step1 from "./steps/Step1";
 import Step2 from "./steps/Step2";
 import Step3 from "./steps/Step3";
+import { toast } from "sonner";
 
 const MultiForm = () => {
+  const { createSite } = useSite();
+
   const [activeStep, setActiveStep] = React.useState(0);
   const [isLastStep, setIsLastStep] = React.useState(false);
   const [isFirstStep, setIsFirstStep] = React.useState(false);
@@ -31,25 +36,54 @@ const MultiForm = () => {
   const [appSecretValue, setAppSecretValue] = React.useState("");
 
   // Step 3
-  const [patName, setpatName] = React.useState("");
-  const [patSecret, setpatSecret] = React.useState("");
+  const [patName, setPatName] = React.useState("");
+  const [patSecret, setPatSecret] = React.useState("");
 
   const handleNext = () => !isLastStep && setActiveStep((cur) => cur + 1);
   const handlePrev = () => !isFirstStep && setActiveStep((cur) => cur - 1);
 
-  const handleSubmit = () => {
-    console.log({
-      siteName,
-      tableauUsername,
-      tableauBaseUrl,
-      tableauUrl,
-      tableauSiteName,
+  const handleSubmit = async () => {
+    if (
+      !siteName ||
+      !tableauUsername ||
+      !tableauBaseUrl ||
+      !tableauUrl ||
+      !tableauSiteName ||
+      !clientId ||
+      !appSecretId ||
+      !appSecretValue ||
+      !patName ||
+      !patSecret
+    ) {
+      toast.error("Please fill in all the fields.");
+      return;
+    }
+
+    const response = await createSite({
+      name: siteName,
+      username: tableauUsername,
+      baseUrl: tableauBaseUrl,
+      siteName: tableauSiteName,
       clientId,
       appSecretId,
       appSecretValue,
       patName,
       patSecret,
     });
+
+    if (response) {
+      setActiveStep(0);
+      setSiteName("");
+      setTableauUsername("");
+      setTableauBaseUrl("");
+      setTableauUrl("");
+      setTableauSiteName("");
+      setClientId("");
+      setAppSecretId("");
+      setAppSecretValue("");
+      setPatName("");
+      setPatSecret("");
+    }
   };
 
   return (
@@ -150,9 +184,9 @@ const MultiForm = () => {
         {activeStep === 2 && (
           <Step3
             patName={patName}
-            setpatName={setpatName}
+            setPatName={setPatName}
             patSecret={patSecret}
-            setpatSecret={setpatSecret}
+            setPatSecret={setPatSecret}
             handleSubmit={handleSubmit}
           />
         )}

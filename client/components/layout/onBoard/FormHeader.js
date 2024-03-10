@@ -13,7 +13,7 @@ const FormHeader = ({ isSigningUp }) => {
       <div className="-mb-8 p-6 text-white prevent-select">
         <Image
           src="/assets/logo-white.png"
-          alt="DataSync"
+          alt="DataSync logo white"
           width={100}
           height={100}
         />

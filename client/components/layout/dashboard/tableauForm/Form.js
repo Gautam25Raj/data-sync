@@ -16,8 +16,11 @@ const Form = ({ setIsClicked }) => {
         <AiOutlineLoading3Quarters className="animate-spin text-5xl text-blue-500" />
       }
     >
-      <div className="flex flex-grow flex-col w-full p-3 cursor-pointer">
-        <div onClick={handleGoBack} className="flex items-start w-fit flex-col">
+      <div className="flex flex-grow flex-col w-full p-3">
+        <div
+          onClick={handleGoBack}
+          className="flex items-start w-fit flex-col cursor-pointer"
+        >
           <IoMdArrowBack size={28} />
 
           <p className="text-xs">Go Back</p>
