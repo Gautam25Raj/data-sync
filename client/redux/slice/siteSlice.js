@@ -7,6 +7,8 @@ const siteSlice = createSlice({
     sites: [],
     currentSite: null,
     currentActionSite: null,
+    currentView: null,
+    token: null,
   },
 
   reducers: {
@@ -47,6 +49,22 @@ const siteSlice = createSlice({
     clearCurrentActionSite: (state) => {
       state.currentActionSite = null;
     },
+
+    setCurrentView: (state, action) => {
+      state.currentView = action.payload;
+    },
+
+    clearCurrentView: (state) => {
+      state.currentView = null;
+    },
+
+    setToken: (state, action) => {
+      state.token = action.payload;
+    },
+
+    clearToken: (state) => {
+      state.token = null;
+    },
   },
 });
 
@@ -60,6 +78,10 @@ export const {
   clearCurrentSite,
   setCurrentActionSite,
   clearCurrentActionSite,
+  setCurrentView,
+  clearCurrentView,
+  setToken,
+  clearToken,
 } = siteSlice.actions;
 
 export default siteSlice.reducer;

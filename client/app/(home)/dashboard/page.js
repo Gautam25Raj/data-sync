@@ -8,6 +8,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import { Suspense, useState } from "react";
+import ViewContainer from "@/components/layout/dashboard/view/ViewContainer";
 
 const SiteContainer = dynamic(() =>
   import("@/components/layout/dashboard/sites/SiteContainer")
@@ -26,6 +27,7 @@ const DashboardPage = () => {
 
   const sites = useSelector((state) => state.site.sites);
   const currentSite = useSelector((state) => state.site.currentSite);
+  const currentview = useSelector((state) => state.site.currentView);
 
   const handleConnectToTableau = () => {
     setIsClicked(true);
@@ -37,7 +39,9 @@ const DashboardPage = () => {
     >
       <div className="flex h-screen py-2 ml-2 flex-1 w-full">
         <Card className="rounded-xl bg-white flex-1 flex flex-grow h-full justify-center items-center">
-          {currentSite ? (
+          {currentview ? (
+            <ViewContainer />
+          ) : currentSite ? (
             <TableauContainer />
           ) : sites.length > 0 && !isClicked ? (
             <SiteContainer sites={sites} setIsClicked={setIsClicked} />
