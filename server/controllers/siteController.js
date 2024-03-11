@@ -1,4 +1,5 @@
 const Site = require("../models/Site");
+const { getSiteId } = require("../utils/utils");
 
 const getSite = async (req, res) => {
   const { siteId } = req.params;
@@ -61,6 +62,15 @@ const createSite = async (req, res) => {
   }
 
   siteData.admin = user.id;
+
+  const siteId = await getSiteId(
+    siteData.baseUrl,
+    siteData.patName,
+    siteData.patSecret,
+    siteData.siteName
+  );
+
+  siteData.siteId = siteId;
 
   try {
     const site = new Site(siteData);

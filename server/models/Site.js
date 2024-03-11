@@ -51,6 +51,11 @@ const siteSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+
+    siteId: {
+      type: String,
+      required: true,
+    },
   },
 
   {
