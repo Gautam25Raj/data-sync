@@ -1,6 +1,7 @@
 "use client";
 
 import { List } from "@material-tailwind/react";
+
 import ProjectItems from "./ProjectItems";
 
 export default function ProjectView({ projects }) {
