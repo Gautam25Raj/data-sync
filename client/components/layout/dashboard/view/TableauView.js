@@ -35,7 +35,7 @@ export default function TableauView({ view, edit }) {
               src={view.embedUrl}
               device={"desktop"}
               toolbar="top"
-              token={token.token}
+              // token={token.token}
               hide-close-button
             ></tableau-authoring-viz>
           ) : (
@@ -48,7 +48,7 @@ export default function TableauView({ view, edit }) {
               src={view.embedUrl}
               device={"desktop"}
               toolbar="top"
-              token={token.token}
+              // token={token.token}
             ></tableau-viz>
           )
         ) : (
