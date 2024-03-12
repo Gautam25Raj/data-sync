@@ -1,17 +1,19 @@
 "use client";
 
+import { useRef } from "react";
 import { useSelector } from "react-redux";
 
 export default function TableauView({ view, edit }) {
   const token = useSelector((state) => state.site.token);
+  const ref = useRef(null);
   return (
     <div className="flex flex-col flex-grow justify-between h-full bg-gray-50 rounded-lg py-12 overflow-y-auto overflow-x-hidden relative">
-      <div className="absolute top-0 left-0 w-full h-full p-2">
+      <div className="absolute top-0 left-0 w-full h-full p-2" ref={ref}>
         {edit ? (
           <tableau-authoring-viz
             id="tableauViz"
-            height="100%"
-            width="100%"
+            height={ref.current?.offsetHeight}
+            width={ref.current?.offsetWidth}
             hide-tabs
             src={view.embedUrl}
             toolbar="top"
@@ -21,8 +23,8 @@ export default function TableauView({ view, edit }) {
         ) : (
           <tableau-viz
             id="tableauViz"
-            height="100%"
-            width="100%"
+            height={ref.current?.offsetHeight}
+            width={ref.current?.offsetWidth}
             hide-tabs
             hide-edit-button
             src={view.embedUrl}
