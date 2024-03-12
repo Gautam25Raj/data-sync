@@ -47,12 +47,12 @@ io.on("connection", (socket) => {
   console.log("New client connected");
 
   socket.on("join-room", (roomId) => {
-    console.log("Room ID: ", roomId);
+    // console.log("Room ID: ", roomId);
     socket.join(roomId);
   });
 
   socket.on("draw", (data) => {
-    console.log(data);
+    // console.log(data);
     io.to(data.roomId).emit("draw", data);
   });
 
@@ -61,7 +61,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("canvas-state", (data) => {
-    console.log("received canvas state");
+    // console.log("received canvas state");
     io.to(data.roomId).emit("canvas-state-from-server", data.state);
   });
 

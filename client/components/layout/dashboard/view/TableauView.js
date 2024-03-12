@@ -16,6 +16,7 @@ export default function TableauView({ view, edit }) {
   useEffect(() => {
     const getToken = async () => {
       const response = await getTableauToken(currentSite._id);
+      console.log(response);
     };
 
     if (currentSite._id) getToken();
@@ -32,8 +33,9 @@ export default function TableauView({ view, edit }) {
               width={ref.current?.offsetWidth}
               hide-tabs
               src={view.embedUrl}
+              device={"desktop"}
               toolbar="top"
-              token={token}
+              token={token.token}
               hide-close-button
             ></tableau-authoring-viz>
           ) : (
@@ -46,7 +48,7 @@ export default function TableauView({ view, edit }) {
               src={view.embedUrl}
               device={"desktop"}
               toolbar="top"
-              token={token}
+              token={token.token}
             ></tableau-viz>
           )
         ) : (

@@ -57,7 +57,7 @@ const TableauContainer = () => {
             />
           </div>
         ) : (
-          projects.length > 0 && <ProjectView projects={projects} />
+          projects?.length > 0 && <ProjectView projects={projects} />
         )}
       </div>
     </Suspense>

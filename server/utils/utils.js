@@ -1,7 +1,6 @@
 const axios = require("axios").default;
 
 async function getRequestHeader(siteData) {
-  console.log("Get Req Header: ", siteData);
   const { data } = await axios.post(`${siteData.baseUrl}/auth/signin`, {
     credentials: {
       personalAccessTokenName: siteData.patName,

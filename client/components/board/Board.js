@@ -1,12 +1,14 @@
 "use client";
 
 import { io } from "socket.io-client";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { useRef, useEffect, useState } from "react";
 
 import { useDraw } from "@/hooks/useDraw";
 
 import { drawLine } from "@/utils/drawLine";
+import Tools from "./Tools";
+import { toast } from "sonner";
 
 const socket = io("http://localhost:8080");
 
@@ -29,7 +31,7 @@ const Board = () => {
 
     socket.on("get-canvas-state", () => {
       if (!canvasRef.current?.toDataURL()) return;
-      console.log("sending canvas state");
+      // console.log("sending canvas state");
       socket.emit("canvas-state", {
         state: canvasRef.current.toDataURL(),
         roomId,
@@ -37,7 +39,7 @@ const Board = () => {
     });
 
     socket.on("canvas-state-from-server", (state) => {
-      console.log("I received the state");
+      // console.log("I received the state");
       const img = new Image();
       img.src = state;
       img.onload = () => {
@@ -46,7 +48,8 @@ const Board = () => {
     });
 
     socket.on("draw", ({ prevPoint, currentPoint, color }) => {
-      if (!ctx) return console.log("no ctx here");
+      if (!ctx) return;
+      // console.log("no ctx here");
       drawLine({ prevPoint, currentPoint, ctx, color });
     });
 
@@ -72,25 +75,34 @@ const Board = () => {
     drawLine({ prevPoint, currentPoint, ctx, color });
   }
 
+  const clearCanvas = () => {
+    clear();
+    toast.info("Your Canvas cleared!");
+  };
+
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        overflow: "hidden",
-      }}
-    >
-      <canvas
-        ref={canvasRef}
-        onMouseDown={onMouseDown}
-        width={2000}
-        height={2000}
-        className="border border-black"
-      />
-    </div>
+    <>
+      <div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          overflow: "hidden",
+        }}
+      >
+        <canvas
+          ref={canvasRef}
+          onMouseDown={onMouseDown}
+          width={2000}
+          height={2000}
+          className="border border-black"
+        />
+      </div>
+
+      <Tools createLine={createLine} clear={clearCanvas} setColor={setColor} />
+    </>
   );
 };
 
