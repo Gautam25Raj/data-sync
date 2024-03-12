@@ -9,10 +9,10 @@ const { setToken } = require("@/redux/slice/siteSlice");
 const useTableau = () => {
   const dispatch = useDispatch();
 
-  const getTableauToken = async () => {
+  const getTableauToken = async (id) => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/tableau/token`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/tableau/token/${id}`,
         {
           method: "GET",
           headers: {
