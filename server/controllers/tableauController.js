@@ -33,24 +33,33 @@ const getTableauToken = async (req, res) => {
 
     const { username, clientId, appSecretId, appSecretValue } = siteData;
 
+    console.log("Site data", siteData);
+
+    const scopes = [
+      "tableau:views:embed",
+      "tableau:views:embed_authoring",
+      "tableau:ask_data:embed",
+    ];
+
     const payload = {
       jti: uuidv4(),
       aud: "tableau",
       sub: username,
-      scp: ["tableau:views:embed", "tableau:views:embed_authoring"],
-      exp: Math.floor(Date.now() / 1000) + 1 * 60,
+      scp: scopes,
     };
 
-    const header = {
-      alg: "HS256",
-      typ: "JWT",
-      kid: appSecretId,
-      iss: clientId,
+    const options = {
+      algorithm: "HS256",
+      expiresIn: 5 * 60,
+      header: {
+        alg: "HS256",
+        typ: "JWT",
+        kid: appSecretId,
+        iss: clientId,
+      },
     };
 
-    const token = jwt.sign(payload, appSecretValue, {
-      header,
-    });
+    const token = jwt.sign(payload, appSecretValue, options);
 
     return res.status(200).json({ token });
   } catch (error) {
