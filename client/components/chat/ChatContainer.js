@@ -18,10 +18,13 @@ import ChannelsSearch from "./channels/ChannelsSearch";
 
 import ContactsBtn from "../ui/buttons/ContactsBtn";
 import ChannelGroupBtn from "../ui/buttons/ChannelGroupBtn";
+import ReloadContactBtn from "../ui/buttons/ReloadContactBtn";
 
 const ChatContainer = () => {
   const { fetchChats } = useContact();
   const { getJoinedChannels } = useChannel();
+
+  const [reload, setReload] = useState(0);
 
   const [isChannelLoading, setIsChannelLoading] = useState(true);
   const [isContactLoading, setIsContactLoading] = useState(true);
@@ -44,7 +47,7 @@ const ChatContainer = () => {
     };
 
     initializeChats();
-  }, []);
+  }, [reload]);
 
   useEffect(() => {
     const initializeChannels = async () => {
@@ -60,7 +63,11 @@ const ChatContainer = () => {
     };
 
     initializeChannels();
-  }, []);
+  }, [reload]);
+
+  const handleReload = () => {
+    setReload(reload + 1);
+  };
 
   return (
     <div className="sticky h-screen top-0 py-2 ml-2 w-full min-w-fit max-w-72 z-20">
@@ -75,7 +82,10 @@ const ChatContainer = () => {
               {isGroup ? "Channel Groups" : "Contacts"}
             </h2>
 
-            {!isGroup && <AddContactsBtn />}
+            <div className="flex gap-1">
+              {!isGroup && <AddContactsBtn />}
+              <ReloadContactBtn handleReload={handleReload} />
+            </div>
           </div>
 
           {!isGroup ? <ContactsSearch /> : <ChannelsSearch />}

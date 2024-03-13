@@ -13,6 +13,8 @@ import { removeSelectedContact, setGroup } from "@/redux/slice/contactSlice";
 
 import ChannelMenuBtn from "./ChannelMenuBtn";
 import SideNavItem from "@/components/sidebar/SideNavItem";
+import { IoReload } from "react-icons/io5";
+import { toast } from "sonner";
 
 const ChannelJoinedBtn = ({ activeItem, handleItemClick }) => {
   const dispatch = useDispatch();
@@ -37,9 +39,27 @@ const ChannelJoinedBtn = ({ activeItem, handleItemClick }) => {
     dispatch(setCurrentChannel(channel));
   };
 
+  const handleReload = async () => {
+    setLoading(true);
+
+    await getJoinedChannels();
+
+    setTimeout(() => {
+      setLoading(false);
+      toast.success("Reloaded Successfully!");
+    }, 1000);
+  };
+
   return (
     <>
-      <p className="text-sm text-gray-500">Joined Channels</p>
+      <div className="flex justify-between">
+        <p className="text-sm text-gray-500">Joined Channels</p>
+
+        <IoReload
+          className="text-gray-500 cursor-pointer mr-4"
+          onClick={handleReload}
+        />
+      </div>
 
       {loading ? (
         <AiOutlineLoading3Quarters className="mx-auto animate-spin" />

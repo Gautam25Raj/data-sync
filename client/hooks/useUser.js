@@ -123,7 +123,8 @@ const useUser = () => {
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error);
+        toast.error(data.error);
+        throw new Error(data);
       }
 
       const data = await response.json();
@@ -135,7 +136,7 @@ const useUser = () => {
 
       router.push("/dashboard");
     } catch (error) {
-      toast.error(err.message);
+      console.log(error);
     }
   };
 

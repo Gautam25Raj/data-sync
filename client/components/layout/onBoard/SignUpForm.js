@@ -54,14 +54,14 @@ const SignUpForm = () => {
       const response = await signUpUser({ email, username, password });
 
       if (response) {
-        toast.success("User created successfully.");
+        toast.message("User created Successfully", {
+          description: "Redirecting to dashboard...",
+        });
       }
 
       setIsLoading(false);
-
-      toast.loading("Logging in...");
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.error);
       setIsLoading(false);
     }
   };
