@@ -10,7 +10,7 @@ import { drawLine } from "@/utils/drawLine";
 import Tools from "./Tools";
 import { toast } from "sonner";
 
-const socket = io("http://localhost:8080");
+const socket = io("https://ably.dotcombackend.me");
 
 const Board = () => {
   const router = usePathname();

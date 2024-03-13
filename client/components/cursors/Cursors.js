@@ -39,12 +39,12 @@ const MemberCursors = () => {
         const member = data?.member;
 
         if (cursorUpdate?.data?.state === "leave") return null;
-        const { userColors } = member.profileData;
+        const { userColors } = member?.profileData;
 
         return (
           <div
             key={member.connectionId}
-            id={`member-cursor-${member.connectionId}`}
+            id={`member-cursor-${member?.connectionId}`}
             className="absolute"
             style={{
               zIndex: 1000,
