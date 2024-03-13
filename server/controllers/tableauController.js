@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { randomBytes } = require("crypto");
+const { v4: uuidv4 } = require("uuid");
 
 const Site = require("../models/Site");
 
@@ -13,6 +14,7 @@ const {
 const getTableauToken = async (req, res) => {
   const { siteId } = req.params;
   const userData = req.userData;
+  console.log("Genrating token");
 
   try {
     if (!siteId) {
@@ -32,20 +34,22 @@ const getTableauToken = async (req, res) => {
     const { username, clientId, appSecretId, appSecretValue } = siteData;
 
     const payload = {
-      jti: randomBytes(64).toString("hex"),
-      iss: clientId,
+      jti: uuidv4(),
       aud: "tableau",
       sub: username,
       scp: ["tableau:views:embed", "tableau:views:embed_authoring"],
+      exp: Math.floor(Date.now() / 1000) + 1 * 60,
+    };
+
+    const header = {
+      alg: "HS256",
+      typ: "JWT",
+      kid: appSecretId,
+      iss: clientId,
     };
 
     const token = jwt.sign(payload, appSecretValue, {
-      algorithm: "HS256",
-      expiresIn: "30d",
-      header: {
-        kid: appSecretId,
-        iss: clientId,
-      },
+      header,
     });
 
     return res.status(200).json({ token });
