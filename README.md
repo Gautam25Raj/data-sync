@@ -53,7 +53,7 @@ npm start
 
 1. **Clone the Repository**: Clone the server repository to your local machine:
 ```bash
-git clone https://github.com/yourusername/data-sync-server.git
+git clone https://github.com/Gautam25Raj/data-sync
 ```
 
 2. **Install Dependencies**: Navigate to the server directory and install dependencies using npm or yarn:
