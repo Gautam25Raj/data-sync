@@ -85,7 +85,6 @@ npm start
 **Note:** The server will run at either `http://localhost:5000` or `http://localhost:8080`, as specified in the `.env` file.
 
 Now you have both the client and server components of Data Sync up and running. You can start collaborating and visualizing data seamlessly!
-Save this content in a file with a .md extension, and it will serve as your README file. Adjust the URLs and commands as needed for your project.
 
 ## Project Folder Structure
 
